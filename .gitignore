@@ -1,0 +1,7 @@
+__pycache__/
+output/
+localSamples/
+*.root
+*.pdf
+*.png
+tmp_*.py
