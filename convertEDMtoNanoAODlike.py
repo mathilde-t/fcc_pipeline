@@ -57,6 +57,8 @@ class RDFanalysis:
         df = df.Define("lep0_pt", "FCCAnalyses::ReconstructedParticle::get_pt(dilepton_leps)[0]")
         df = df.Define("lep1_pt", "FCCAnalyses::ReconstructedParticle::get_pt(dilepton_leps)[1]")
 
+        df = df.Filter("lep_pcut.size() >= 2")
+
         return df  
 
 
