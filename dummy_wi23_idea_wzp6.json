@@ -1,0 +1,25 @@
+{
+    "ee_events_193158988": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+    
+    "ee_events_194455359": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+
+    "mumu_events_196687800": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+    
+    "mumu_events_197347757": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    }
+}
