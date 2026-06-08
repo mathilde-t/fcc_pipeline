@@ -13,6 +13,11 @@ datasets = {
     "ee_mumu_ecm91_delphes": {"lep": "Muon", "xsec": 2024.7,},
 }
 
+datasets = {
+    "events_003635753": {"lep": "Electron", "xsec": 2020.4,},
+    "events_007405803": {"lep": "Muon", "xsec": 2024.7,},
+    "events_009996087": {"lep": "Electron", "xsec": 2020.4,},
+}
 template = "convertEDMtoNanoAODlike.py"
 
 for dataset, info in datasets.items():

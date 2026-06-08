@@ -24,7 +24,7 @@ axis_mapping = {"dilepton_m" : {"xmin":     0,
                                 "ymin":     0,
                                 "ymax":     2000,
                                 "bins":     200,
-                                "rebin":     5,},
+                                "rebin":     8,},
                 "lep0_p" : {"xmin":     0,
                             "xmax":     100,
                             "ymin":     0,
@@ -126,6 +126,6 @@ for var in variables:
     ax.grid(alpha=0.3)
 
     # save
-    plt.savefig(f"output/plot_nTuple/{var}_flat_nTuple.pdf")
-    plt.savefig(f"output/plot_nTuple/{var}_flat_nTuple.png")
+    plt.savefig(f"output/plots/nTuples/{var}_flat_nTuple.pdf")
+    plt.savefig(f"output/plots/nTuples/{var}_flat_nTuple.png")
     plt.close()

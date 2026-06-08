@@ -1,0 +1,19 @@
+{
+    "events_003635753": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+    
+    "events_007405803": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+
+    "events_009996087": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    }
+}

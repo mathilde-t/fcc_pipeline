@@ -17,8 +17,8 @@ processList = {
     #"ee_ll_ecm91_delphes": {"fraction": 1.0, "crossSection": 8533.7,},
 }
 
-inputDir = "./localSamples"
-outputDir = "./output/histmaker"
+inputDir = "./localSamples/diy"
+outputDir = "./output/histmaker/diy_samples_delphes"
 
 # optional: ncpus, default is 4, -1 uses all cores available
 nCPUS       = -1

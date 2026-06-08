@@ -11,7 +11,8 @@ processList = {
 
 #Optional: output directory, default is local running directory
 outputDir = "./output/convertEDMtoNanoAODlike"
-inputDir = "./localSamples"
+inputDir = "./localSamples/IDEA_FullSilicon/p8_ee_Zll_ecm240"
+# inputDir = "./localSamples/diy"
 
 includePaths = ["functions.h"]
 
