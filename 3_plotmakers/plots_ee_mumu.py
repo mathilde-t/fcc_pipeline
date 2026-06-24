@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis plots plots_ee_mumu.py 
+run with : fccanalysis plots 3_plotmakers/plots_ee_mumu.py 
 '''
 
 import ROOT
@@ -43,7 +43,7 @@ legend['mumu_reco'] = '#mu^{+}#mu^{-}'
 #legend['tautau_reco'] = '#tau^{+}#tau^{-}'
 #legend['ll_reco'] = '#ell^{+}#ell^{-}'
 
-from plot_config import hists
+from 3_plotmakers/plot_config import hists
 
 #hists = {}
 #

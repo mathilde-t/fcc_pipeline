@@ -67,7 +67,7 @@ legend = {
 # -----------------------------
 # hist definitions (your config, slightly adapted)
 # -----------------------------
-from plot_config import hists
+from 3_plotmakers/plot_config import hists
 #hists = {
 #
 #    "dilepton_m": {

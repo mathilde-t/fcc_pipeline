@@ -1,7 +1,7 @@
 {
     "events_003635753": {
         "crossSection": 1.0,
-        "kfactor": 1.0,
+        "kfactor": 1.0,      # how much of the whole sample i want to use, e.g. 0.5 means i want to use only half of the events
         "matchingEfficiency": 1.0
     },
     

@@ -1,7 +1,7 @@
 '''
-run with : fccanalysis run tree.py
+run with : fccanalysis run 2_treemakers/tree.py
 
-This script runs the conversion script "convertEDMtoNanoAODlike.py" for each dataset, 
+This script runs the conversion script "2_treemakers/convertEDMtoNanoAODlike.py" for each dataset, 
 by creating temporary config files on the fly and executing them with FCCAnalysis. 
 '''
 
@@ -18,7 +18,7 @@ datasets = {
     "events_007405803": {"lep": "Muon", "xsec": 2024.7,},
     "events_009996087": {"lep": "Electron", "xsec": 2020.4,},
 }
-template = "convertEDMtoNanoAODlike.py"
+template = "2_treemakers/convertEDMtoNanoAODlike.py"
 
 for dataset, info in datasets.items():
 

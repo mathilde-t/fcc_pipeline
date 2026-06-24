@@ -1,4 +1,4 @@
-# plot_config.py
+# 3_plotmakers/plot_config.py
 
 hists = {
 

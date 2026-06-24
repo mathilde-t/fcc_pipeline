@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis run convertEDMtoNanoAODlike.py (called tree.py in docs)
+run with : fccanalysis run 2_treemakers/convertEDMtoNanoAODlike.py (called 2_treemakers/tree.py in docs)
 '''
 
 processList = {
@@ -10,7 +10,7 @@ processList = {
 #prodTag     = "FCCee/winter2023/IDEA/"
 
 #Optional: output directory, default is local running directory
-outputDir = "./output/convertEDMtoNanoAODlike"
+outputDir = "./output/2_treemakers/convertEDMtoNanoAODlike"
 inputDir = "./localSamples/IDEA_FullSilicon/p8_ee_Zll_ecm240"
 # inputDir = "./localSamples/diy"
 

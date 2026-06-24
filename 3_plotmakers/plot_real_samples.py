@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis plots plots_ee_mumu.py 
+run with : fccanalysis plots 3_plotmakers/plots_ee_mumu.py 
 '''
 
 import ROOT

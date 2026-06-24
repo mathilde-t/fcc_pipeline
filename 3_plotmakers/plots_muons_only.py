@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis plots plots.py 
+run with : fccanalysis plots 3_plotmakers/plots_muons_only.py 
 '''
 
 import ROOT

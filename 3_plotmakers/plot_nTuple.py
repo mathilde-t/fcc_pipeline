@@ -1,8 +1,8 @@
 '''
 run with : python plot_nTuple.py
 
-This script makes analougous plots to the ones in hists_ee_mumu.py, 
-but using the flat nTuples created with tree.py.
+This script makes analougous plots to the ones in 1_histmakers/hists_ee_mumu.py, 
+but using the flat nTuples created with 2_treemakers/tree.py.
 '''
 
 import uproot
@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # open ROOT file
-file_ee = uproot.open("./output/convertEDMtoNanoAODlike/ee_ee_ecm91_delphes.root")
-file_mumu = uproot.open("./output/convertEDMtoNanoAODlike/ee_mumu_ecm91_delphes.root")
+file_ee = uproot.open("./output/2_treemakers/convertEDMtoNanoAODlike/ee_ee_ecm91_delphes.root")
+file_mumu = uproot.open("./output/2_treemakers/convertEDMtoNanoAODlike/ee_mumu_ecm91_delphes.root")
 
 axis_mapping = {"dilepton_m" : {"xmin":     0,
                                 "xmax":     100,
