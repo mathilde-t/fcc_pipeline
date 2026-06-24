@@ -2,7 +2,7 @@
     Plotting script for the dilepton analysis with real samples using root, not the fcc plotter,
     because we want to overlay the two channels in the same plot.
     
-    run with python plot_real_samples_pyroot.py
+    run with python 3_plotmakers/plot_real_samples_pyroot.py
 '''
 
 import ROOT

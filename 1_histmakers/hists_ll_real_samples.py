@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis run hists_ll_real_samples.py
+run with : fccanalysis run 1_histmakers/hists_ll_real_samples.py
 '''
 
 # list of processes
@@ -36,9 +36,9 @@ outputDir = "./output/histmaker/wi23_idea_wzp6"
 nCPUS       = -1
 
 # Link to the dictonary that contains all the cross section informations etc... (mandatory)
-procDict = "dummy_real_samples.json"
-procDict = "dummy_wi23.json"
-procDict = "dummy_wi23_idea_wzp6.json"
+procDict = "jsons/dummy_real_samples.json"
+procDict = "jsons/dummy_wi23.json"
+procDict = "jsons/dummy_wi23_idea_wzp6.json"
 
 # additional/custom C++ functions, defined in header files (optional)
 includePaths = ["functions.h"]

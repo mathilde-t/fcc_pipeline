@@ -1,5 +1,5 @@
 '''
-run with : python plot_nTuple.py
+run with : python 3_plotmakers/plot_nTuple.py
 
 This script makes analougous plots to the ones in 1_histmakers/hists_ee_mumu.py, 
 but using the flat nTuples created with 2_treemakers/tree.py.
