@@ -1,29 +1,24 @@
 '''
-run with : fccanalysis run 2_treemakers/tree.py
+run with : fccanalysis run treemakers/tree.py
 
-This script runs the conversion script "2_treemakers/convertEDMtoNanoAODlike.py" for each dataset, 
+This script runs the conversion script "treemakers/convertEDMtoNanoAODlike.py" for each dataset, 
 by creating temporary config files on the fly and executing them with FCCAnalysis. 
 '''
 
 import os
-import shutil
+from scripts.config import get_config
 
-datasets = {
-    "ee_ee_ecm91_delphes": {"lep": "Electron", "xsec": 2020.4,},
-    "ee_mumu_ecm91_delphes": {"lep": "Muon", "xsec": 2024.7,},
-}
+cfg = get_config("local_prod_ee_mumu")
 
-datasets = {
-    "events_003635753": {"lep": "Electron", "xsec": 2020.4,},
-    "events_007405803": {"lep": "Muon", "xsec": 2024.7,},
-    "events_009996087": {"lep": "Electron", "xsec": 2020.4,},
-}
-template = "2_treemakers/convertEDMtoNanoAODlike.py"
+template = "treemakers/convertEDMtoNanoAODlike.py"
 
-for dataset, info in datasets.items():
+for dataset, info in cfg.processList.items():
+
+    if "lep" not in info:
+        raise ValueError(f"No lepton defined for dataset {dataset}")
 
     lep = info["lep"]
-    xsec = info["xsec"]
+    xsec = info["crossSection"]
     print(f"Processing dataset: {dataset} with lepton: {lep}")
 
     # create temporary analysis config
@@ -35,6 +30,13 @@ for dataset, info in datasets.items():
     content = content.replace("__LEPTON__", lep)
     content = content.replace("__DATASET__", dataset)
     content = content.replace("__XSEC__", str(xsec))
+
+    content = content.replace("__INPUTDIR__", cfg.inputDir)
+    content = content.replace("__OUTPUTDIR__", cfg.outputDir)
+    content = content.replace(
+        "__PRODTAG__",
+        f'prodTag = "{cfg.prodTag}"' if cfg.prodTag else ""
+    )
 
     with open(output_script, "w") as f:
         f.write(content)

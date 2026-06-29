@@ -1,8 +1,10 @@
 '''
-run with : python 3_plotmakers/plot_nTuple.py
+run with : python plotmakers/plot_nTuple.py
 
-This script makes analougous plots to the ones in 1_histmakers/hists_ee_mumu.py, 
-but using the flat nTuples created with 2_treemakers/tree.py.
+This script makes analougous plots to the ones in plots_inclusive_fs__pyroot, 
+but using the flat nTuples created with treemakers/tree.py -> convertEDMtoNanoAODlike.py.
+
+This script is not dynamic and made for the display of one ee final state and one mumu final state file.
 '''
 
 import uproot
@@ -10,8 +12,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # open ROOT file
-file_ee = uproot.open("./output/2_treemakers/convertEDMtoNanoAODlike/ee_ee_ecm91_delphes.root")
-file_mumu = uproot.open("./output/2_treemakers/convertEDMtoNanoAODlike/ee_mumu_ecm91_delphes.root")
+file_ee = uproot.open("./output/treemakers/convertEDMtoNanoAODlike/ee_ee_ecm91_delphes.root")
+file_mumu = uproot.open("./output/treemakers/convertEDMtoNanoAODlike/ee_mumu_ecm91_delphes.root")
 
 axis_mapping = {"dilepton_m" : {"xmin":     0,
                                 "xmax":     100,

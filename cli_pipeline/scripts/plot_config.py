@@ -1,5 +1,3 @@
-# 3_plotmakers/plot_config.py
-
 hists = {
 
     "dilepton_m": {

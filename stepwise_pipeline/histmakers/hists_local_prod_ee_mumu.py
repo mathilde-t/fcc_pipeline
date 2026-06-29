@@ -1,52 +1,31 @@
 '''
-run with : fccanalysis run 1_histmakers/hists.py
+run with : fccanalysis run histmakers/hists_local_prod_ee_mumu.py
 '''
 
-# list of processes
-processList = {
-    # gen level
-    # "ee_ee_ecm91": {"fraction": 1.0, "crossSection": 4487.6,},
-    # "ee_mumu_ecm91": {"fraction": 1.0, "crossSection": 2024.7,},
-    # "ee_tautau_ecm91": {"fraction": 1.0,"crossSection": 2020.4,},
-    # "ee_ll_ecm91": {"fraction": 1.0, "crossSection": 8533.7,},
+from scripts.config import get_config
+from scripts.hist_config import BINNING
 
-    # reco level
-    "ee_ee_ecm91_delphes": {"fraction": 1.0, "crossSection": 2020.4,},
-    "ee_mumu_ecm91_delphes": {"fraction": 1.0, "crossSection": 2024.7,},
-    #"ee_tautau_ecm91_delphes": {"fraction": 1.0,"crossSection": 2024.7,},
-    #"ee_ll_ecm91_delphes": {"fraction": 1.0, "crossSection": 8533.7,},
-}
+cfg = get_config("local_prod_ee_mumu")
 
-inputDir = "./localSamples/diy"
-outputDir = "./output/histmaker/diy_samples_delphes"
+inputDir = cfg.inputDir
+outputDir = cfg.outputDir
+procDict = cfg.procDict
+processList = cfg.processList
+
+# Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics (mandatory)
+if cfg.prodTag is not None:
+    prodTag = cfg.prodTag
 
 # optional: ncpus, default is 4, -1 uses all cores available
 nCPUS       = -1
 
-# Link to the dictonary that contains all the cross section informations etc... (mandatory)
-procDict = "jsons/dummy.json"
-
 # additional/custom C++ functions, defined in header files (optional)
 includePaths = ["functions.h"]
-
-# Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics (mandatory)
-#prodTag     = "FCCee/winter2023/IDEA/"
 
 
 # scale the histograms with the cross-section and integrated luminosity
 doScale = False
 intLumi = 5000000 # 5 /ab
-
-# define some binning for various histograms
-
-bins_p = (200, 0, 100)
-bins_m = (150, 0, 100)
-bins_eta = (600, -3, 3)
-bins_phi = (500, -5, 5)
-
-bins_count = (50, 0, 50)
-bins_charge = (10, -5, 5)
-bins_iso = (500, 0, 5)
 
 # build_graph function that contains the analysis logic, cuts and histograms (mandatory)
 def build_graph(df, dataset):
@@ -55,13 +34,7 @@ def build_graph(df, dataset):
     df = df.Define("weight", "1.0")
     weightsum = df.Sum("weight")
     
-    lepton_map = {
-        "ee_ee_ecm91_delphes": "Electron",
-        "ee_mumu_ecm91_delphes": "Muon",
-        #"ee_tautau_ecm91_delphes": "Tau",
-        #"ee_ll_ecm91_delphes": "Lepton"
-    }
-    lep = lepton_map[dataset]
+    lep = cfg.processList[dataset]["lep"]
 
     df = df.Alias(f"{lep}_Idx", f"{lep}_objIdx.index")
     
@@ -96,16 +69,16 @@ def build_graph(df, dataset):
     
     df = df.Filter("lep_pcut.size() >= 2")
 
-    results.append(df.Histo1D(("dilepton_m", "", *bins_m), "dilepton_m"))
-    results.append(df.Histo1D(("dilepton_p", "", *bins_p), "dilepton_p"))
-    results.append(df.Histo1D(("lep0_p", "", *bins_p), "lep0_p"))
-    results.append(df.Histo1D(("lep1_p", "", *bins_p), "lep1_p"))
-    results.append(df.Histo1D(("lep0_eta", "", *bins_eta), "lep0_eta"))
-    results.append(df.Histo1D(("lep1_eta", "", *bins_eta), "lep1_eta"))
-    results.append(df.Histo1D(("lep0_phi", "", *bins_phi), "lep0_phi"))
-    results.append(df.Histo1D(("lep1_phi", "", *bins_phi), "lep1_phi"))
-    results.append(df.Histo1D(("lep0_pt", "", *bins_p), "lep0_pt"))
-    results.append(df.Histo1D(("lep1_pt", "", *bins_p), "lep1_pt"))
+    results.append(df.Histo1D(("dilepton_m", "", *BINNING["m"]), "dilepton_m"))
+    results.append(df.Histo1D(("dilepton_p", "", *BINNING["p"]), "dilepton_p"))
+    results.append(df.Histo1D(("lep0_p", "", *BINNING["p"]), "lep0_p"))
+    results.append(df.Histo1D(("lep1_p", "", *BINNING["p"]), "lep1_p"))
+    results.append(df.Histo1D(("lep0_eta", "", *BINNING["eta"]), "lep0_eta"))
+    results.append(df.Histo1D(("lep1_eta", "", *BINNING["eta"]), "lep1_eta"))
+    results.append(df.Histo1D(("lep0_phi", "", *BINNING["phi"]), "lep0_phi"))
+    results.append(df.Histo1D(("lep1_phi", "", *BINNING["phi"]), "lep1_phi"))
+    results.append(df.Histo1D(("lep0_pt", "", *BINNING["p"]), "lep0_pt"))
+    results.append(df.Histo1D(("lep1_pt", "", *BINNING["p"]), "lep1_pt"))
 
     weightsum = df.Count()
 

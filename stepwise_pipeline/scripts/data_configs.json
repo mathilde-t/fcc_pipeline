@@ -1,0 +1,70 @@
+{
+    "local_prod_ee_mumu": {
+        "inputDir": "./localSamples/diy",
+        "outputDir": "./output/histmaker/diy_samples_delphes",
+        "procDict": "./jsons/dummy.json",
+        "prodTag": null,
+
+        "processList": {
+            "ee_ee_ecm91_delphes": {
+                "fraction": 1.0,
+                "crossSection": 2020.4,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_mumu_ecm91_delphes": {
+                "fraction": 1.0,
+                "crossSection": 2024.7,
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue+1",
+                    "type": "signal"
+                }
+            }
+        },
+        
+        "plotting":{
+            "intLumiLabel": "L = 5 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow #mu^{+}#mu^{-} + X",
+            "delphesVersion": "3.4.2",
+            "energy": 91.0,
+            "plotStatUnc": true
+        }
+        
+    },
+
+    "central_prod_ee_mumu": {
+        "inputDir": "./localSamples/wi23_idea_wzp6",
+        "outputDir": "./output/histmaker/wi23_idea_wzp6",
+        "procDict": "jsons/dummy_wi23_idea_wzp6.json",
+        "prodTag": "FCCee/winter2023/IDEA/",
+
+        "processList": {
+            "ee_events_193158988": {
+                "fraction": 1.0, 
+                "crossSection": 1,
+                "lep": "Electron"
+            },
+            "ee_events_194455359": {
+                "fraction": 1.0, 
+                "crossSection": 1, 
+                "lep": "Muon"},
+            "mumu_events_196687800": {
+                "fraction": 1.0, 
+                "crossSection": 1, 
+                "lep": "Electron"},
+            "mumu_events_197347757": {
+                "fraction": 1.0, 
+                "crossSection": 1, 
+                "lep": "Muon"}
+        }
+    }
+}

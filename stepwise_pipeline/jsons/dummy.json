@@ -1,0 +1,25 @@
+{
+    "ee_ee_ecm91_delphes": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+    
+    "ee_mumu_ecm91_delphes": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+
+    "ee_tautau_ecm91_delphes": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    },
+
+    "ee_ll_ecm91_delphes": {
+        "crossSection": 1.0,
+        "kfactor": 1.0,
+        "matchingEfficiency": 1.0
+    }
+}

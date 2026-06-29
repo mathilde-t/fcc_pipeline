@@ -1,5 +1,5 @@
 '''
-run with : fccanalysis run 2_treemakers/convertEDMtoNanoAODlike.py (called 2_treemakers/tree.py in docs)
+run with : fccanalysis run treemakers/convertEDMtoNanoAODlike.py (called treemakers/tree.py in docs)
 '''
 
 processList = {
@@ -7,12 +7,11 @@ processList = {
 }
 
 # Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics (mandatory)
-#prodTag     = "FCCee/winter2023/IDEA/"
+__PRODTAG__
 
 #Optional: output directory, default is local running directory
-outputDir = "./output/2_treemakers/convertEDMtoNanoAODlike"
-inputDir = "./localSamples/IDEA_FullSilicon/p8_ee_Zll_ecm240"
-# inputDir = "./localSamples/diy"
+inputDir = "__INPUTDIR__"
+outputDir = "__OUTPUTDIR__"
 
 includePaths = ["functions.h"]
 
