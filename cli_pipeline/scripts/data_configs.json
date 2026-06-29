@@ -33,7 +33,7 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
+            "normalisation": true,
             "intLumi": 17000000,
             "n_generated": 5000
 
@@ -41,7 +41,7 @@
         
         "plotting":{
             "intLumiLabel": "L = 17 ab^{-1}",
-            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "ana_tex": "e^{+}e^{-} #rightarrow Z #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
             "gen_or_reco": "reco",
             "delphesVersion": "3.4.2",
             "energy": 91.2,
@@ -107,7 +107,7 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
+            "normalisation": true,
             "intLumi": 17000000,
             "theo_xs": null,
             "n_generated": null

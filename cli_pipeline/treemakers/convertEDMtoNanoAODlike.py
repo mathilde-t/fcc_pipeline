@@ -28,11 +28,17 @@ class RDFanalysis:
         LEPTON = "__LEPTON__"
         print("LEPTON LEPTON LEPTON:", LEPTON)
 
-        df = df.Define(
-            "weight",
-            f"{__XSEC__} * {__INTLUMI__} / {__NGENERATED__}"
-        )
-        
+        SAMPLETYPE = "__SAMPLETYPE__"
+        NORMALISATIONTAG = __NORMALISATIONTAG__
+
+        if SAMPLETYPE == "local" and NORMALISATIONTAG:
+            df = df.Define(
+                "weight",
+                "__XSEC__ * __INTLUMI__ / __NGENERATED__"
+            )
+        else:
+            df = df.Define("weight", "1.0")
+
         df = df.Alias(f"{LEPTON}_Idx", f"{LEPTON}_objIdx.index")
 
         # print(sorted([str(c) for c in df.GetColumnNames() if "objIdx" in str(c)]))

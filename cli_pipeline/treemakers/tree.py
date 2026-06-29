@@ -46,6 +46,8 @@ for dataset, info in cfg.processList.items():
         "__PRODTAG__",
         f'prodTag = "{cfg.prodTag}"' if cfg.prodTag else ""
     )
+    content = content.replace("__SAMPLETYPE__", cfg.sample_type)
+    content = content.replace("__NORMALISATIONTAG__", str(cfg.lumi_scaling["normalisation"]))
     content = content.replace("__INTLUMI__", str(cfg.lumi_scaling["intLumi"]))
     content = content.replace("__NGENERATED__", str(cfg.lumi_scaling["n_generated"]))
 

@@ -44,7 +44,7 @@ includePaths = ["functions.h"]
 # for centrally produced samples, normalise here because the FCC framework expects so,
 # for locally produced samples, normalise while the histogram creation, as they are selfmade
 
-doScale = (sample_type == "cental" and normalisationTag)
+doScale = (sample_type == "central" and normalisationTag)
 if doScale:
     intLumi = intLumi
 
