@@ -7,6 +7,7 @@ by creating temporary config files on the fly and executing them with FCCAnalysi
 
 import os
 from scripts.config import get_config
+from utils_cli.path_utils import make_norm_dir_name
 
 cfg_name = os.environ["FCC_PIPELINE_CONFIG"]
 cfg = get_config(cfg_name)
@@ -39,11 +40,14 @@ for dataset, info in cfg.processList.items():
     content = content.replace("__XSEC__", str(xsec))
 
     content = content.replace("__INPUTDIR__", cfg.inputDir)
-    content = content.replace("__OUTPUTDIR__", cfg.outputDir)
+    print("print(cfg.inputDir)", cfg.inputDir)
+    content = content.replace("__OUTPUTDIR__", make_norm_dir_name(cfg.outputDir) if cfg.lumi_scaling["normalisation"] else cfg.outputDir)
     content = content.replace(
         "__PRODTAG__",
         f'prodTag = "{cfg.prodTag}"' if cfg.prodTag else ""
     )
+    content = content.replace("__INTLUMI__", str(cfg.lumi_scaling["intLumi"]))
+    content = content.replace("__NGENERATED__", str(cfg.lumi_scaling["n_generated"]))
 
     with open(output_script, "w") as f:
         f.write(content)

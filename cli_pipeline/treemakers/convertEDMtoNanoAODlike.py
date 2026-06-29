@@ -13,6 +13,7 @@ __PRODTAG__
 inputDir = "__INPUTDIR__"
 outputDir = "__OUTPUTDIR__"
 
+
 includePaths = ["functions.h"]
 
 nCPUS = 4
@@ -26,6 +27,11 @@ class RDFanalysis:
     def analysers(df):
         LEPTON = "__LEPTON__"
         print("LEPTON LEPTON LEPTON:", LEPTON)
+
+        df = df.Define(
+            "weight",
+            f"{__XSEC__} * {__INTLUMI__} / {__NGENERATED__}"
+        )
         
         df = df.Alias(f"{LEPTON}_Idx", f"{LEPTON}_objIdx.index")
 
@@ -75,6 +81,7 @@ class RDFanalysis:
             "lep1_phi", 
             "lep0_pt",
             "lep1_pt",
+            "weight"
         ]
 
         return branchList

@@ -5,9 +5,9 @@
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
-
+        
         "processList": {
-            "ee_ee_ecm91_delphes": {
+            "ee_z_ee_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 2020.4,
                 "lep": "Electron",
@@ -19,7 +19,7 @@
                 }
             },
 
-            "ee_mumu_ecm91_delphes": {
+            "ee_z_mumu_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 2024.7,
                 "lep": "Muon",
@@ -31,9 +31,16 @@
                 }
             }
         },
+
+        "lumi_scaling":{
+            "normalisation": false,
+            "intLumi": 17000000,
+            "n_generated": 5000
+
+        },
         
         "plotting":{
-            "intLumiLabel": null,
+            "intLumiLabel": "L = 17 ab^{-1}",
             "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
             "gen_or_reco": "reco",
             "delphesVersion": "3.4.2",
@@ -99,8 +106,16 @@
             }
         },
 
+        "lumi_scaling":{
+            "normalisation": false,
+            "intLumi": 17000000,
+            "theo_xs": null,
+            "n_generated": null
+
+        },
+
         "plotting":{
-            "intLumiLabel": "L = 5 ab^{-1}",
+            "intLumiLabel": "L = 17 ab^{-1}",
             "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
             "gen_or_reco": "reco",
             "delphesVersion": null,

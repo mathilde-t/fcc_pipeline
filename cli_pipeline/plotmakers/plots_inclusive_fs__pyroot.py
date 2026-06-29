@@ -6,15 +6,20 @@ python plotmakers/plots_inclusive_fs__pyroot.py
 import ROOT
 import os
 from scripts.config import get_config
+from utils_cli.path_utils import make_norm_dir_name
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
 def run_inclusive_plots(cfg):
 
-    sample_label = cfg.outputDir.split("/")[-1]
-    inputDir = cfg.outputDir
+    normalisationTag = cfg.lumi_scaling["normalisation"]
+    outputDir = cfg.outputDir
+
+    sample_label = outputDir.split("/")[-1]
+    inputDir = make_norm_dir_name(outputDir) if normalisationTag else outputDir
     outdir = f"./output/plots/{sample_label}"
+    outdir = make_norm_dir_name(outdir) if normalisationTag else outdir
     os.makedirs(outdir, exist_ok=True)
 
     plot_meta = cfg.plotting
@@ -98,7 +103,7 @@ def run_inclusive_plots(cfg):
         h = ROOT.TH1F(hname, var, nbins, xmin, xmax)
         h.Sumw2()
 
-        tree.Draw(f"{var} >> {hname}", "", "goff")
+        tree.Draw(f"{var}>>{hname}", "weight", "goff")
 
         if xtitle is not None:
             h.GetXaxis().SetTitle(xtitle)
@@ -109,8 +114,8 @@ def run_inclusive_plots(cfg):
         if ymin is not None:
             h.SetMinimum(ymin)
 
-        if ymax is not None:
-            h.SetMaximum(ymax)
+        #if ymax is not None:
+        #    h.SetMaximum(ymax)
 
         ### debug
         # n = tree.Draw(f"{var}>>{hname}", "", "goff")
@@ -164,12 +169,14 @@ def run_inclusive_plots(cfg):
         var = cfg_hist["output"]
 
         c = ROOT.TCanvas(f"c_{name}", "c", 800, 600)
+        c.SetLeftMargin(0.12)
+        c.SetRightMargin(0.15)
+        c.SetTopMargin(0.12)
 
         h_ee = None
         h_mu = None
 
         ### build histograms per channel
-        #for proc, tree in trees.items():
         for proc, f in files.items():
 
             lep = cfg.processList[proc]["lep"]
@@ -215,7 +222,6 @@ def run_inclusive_plots(cfg):
                 #cut = "abs(lepton_pdgId)==11"
                 if h_ee is None:
                     h_ee = h.Clone("h_ee")
-                    #print("clone ee", h_ee.GetEntries(), hex(ROOT.addressof(h_ee)))
                 else:
                     h_ee.Add(h)
 
@@ -223,7 +229,6 @@ def run_inclusive_plots(cfg):
                 #cut = "abs(lepton_pdgId)==13"
                 if h_mu is None:
                     h_mu = h.Clone("h_mu")
-                    #print("clone mu", h_mu.GetEntries(), hex(ROOT.addressof(h_mu)))
                 else:
                     h_mu.Add(h)
 
@@ -251,7 +256,8 @@ def run_inclusive_plots(cfg):
             h_ee.Draw("hist same")
         
         ### legend
-        leg = ROOT.TLegend(0.72, 0.75, 0.88, 0.88)
+        #leg = ROOT.TLegend(0.79, 0.74, 0.88, 0.85) #legend inside
+        leg = ROOT.TLegend(1.0, 0.75, 0.87, 0.86) #legend outside
         leg.AddEntry(h_ee, legend.get("ee", "e channel"), "l")
         leg.AddEntry(h_mu, legend.get("mumu", "#mu channel"), "l")
         leg.Draw()
@@ -272,10 +278,16 @@ def run_inclusive_plots(cfg):
         latex.DrawLatex(0.68, 0.92, f"#sqrt{{s}} = {energy} GeV")
         if lumi_tex is not None:
             latex.DrawLatex(0.69, 0.96, lumi_tex)
-        latex.DrawLatex(0.12, 0.84, level)
+        latex.DrawLatex(0.15, 0.82, level)
+        if normalisationTag:
+            latex.SetTextSize(0.028)
+            latex.DrawLatex(0.15, 0.78, "Luminosity scaled")
 
         ### save
+        file_name = f"{name}_{sample_label}"
+        file_name_norm = make_norm_dir_name(file_name) if normalisationTag else file_name
+
         for fmt in formats:
-            c.SaveAs(f"{outdir}/{name}_{sample_label}.{fmt}")
+            c.SaveAs(f"{outdir}/{file_name_norm}.{fmt}")
 
         print(f"[OK] saved {name}")
