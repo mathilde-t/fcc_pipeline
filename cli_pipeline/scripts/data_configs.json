@@ -9,7 +9,7 @@
         "processList": {
             "ee_z_ee_ecm91_delphes": {
                 "fraction": 1.0,
-                "crossSection": 2020.4,
+                "crossSection": 2020400,
                 "lep": "Electron",
 
                 "plot": {
@@ -21,7 +21,7 @@
 
             "ee_z_mumu_ecm91_delphes": {
                 "fraction": 1.0,
-                "crossSection": 2024.7,
+                "crossSection": 2024700,
                 "lep": "Muon",
 
                 "plot": {
@@ -33,8 +33,8 @@
         },
 
         "lumi_scaling":{
-            "normalisation": true,
-            "intLumi": 17000000,
+            "normalisation": false,
+            "intLumi": 17000,
             "n_generated": 5000
 
         },
@@ -60,7 +60,7 @@
         "processList": {
             "ee_events_193158988": {
                 "fraction": 1.0, 
-                "crossSection": 1,
+                "crossSection": 3273.82,
                 "lep": "Electron",
 
                 "plot": {
@@ -72,7 +72,7 @@
 
             "ee_events_194455359": {
                 "fraction": 1.0, 
-                "crossSection": 1, 
+                "crossSection": 3273.82, 
                 "lep": "Muon",
 
                 "plot": {
@@ -84,7 +84,7 @@
 
             "mumu_events_196687800": {
                 "fraction": 1.0, 
-                "crossSection": 1, 
+                "crossSection": 1462.08, 
                 "lep": "Electron",
             
                 "plot": {
@@ -95,7 +95,7 @@
             },
             "mumu_events_197347757": {
                 "fraction": 1.0, 
-                "crossSection": 1, 
+                "crossSection": 1462.08, 
                 "lep": "Muon",
 
                 "plot": {
@@ -108,7 +108,7 @@
 
         "lumi_scaling":{
             "normalisation": true,
-            "intLumi": 17000000,
+            "intLumi": 17000,
             "theo_xs": null,
             "n_generated": null
 

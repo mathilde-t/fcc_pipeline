@@ -130,12 +130,15 @@ def build_graph(df, dataset):
         #    "weight"
         #)
         #
+        #print("h_unweighted.GetName() :", h_unweighted.GetName())
+        #print("h_unweighted.GetName() :", h_weighted.GetName())
+        #
         #print("Unweighted entries :", h_unweighted.GetEntries())
         #print("Unweighted integral:", h_unweighted.Integral())
         #
         #print("Weighted entries   :", h_weighted.GetEntries())
         #print("Weighted integral  :", h_weighted.Integral())
-        #
+        
         #for h in results:
         #    print("getName, GetEntries, Integral \t",
         #        h.GetName(), "\t", 

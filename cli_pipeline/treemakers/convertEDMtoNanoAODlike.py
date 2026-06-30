@@ -31,10 +31,14 @@ class RDFanalysis:
         SAMPLETYPE = "__SAMPLETYPE__"
         NORMALISATIONTAG = __NORMALISATIONTAG__
 
+        print("NORMALISATIONTAG ",NORMALISATIONTAG)
+        print(type(NORMALISATIONTAG))
+        print(bool(NORMALISATIONTAG))
+
         if SAMPLETYPE == "local" and NORMALISATIONTAG:
             df = df.Define(
                 "weight",
-                "__XSEC__ * __INTLUMI__ / __NGENERATED__"
+                "(double)__XSEC__ * (double)__INTLUMI__ / (double)__NGENERATED__"
             )
         else:
             df = df.Define("weight", "1.0")
@@ -89,5 +93,7 @@ class RDFanalysis:
             "lep1_pt",
             "weight"
         ]
+
+        print("branchList : \t ", branchList[-1])
 
         return branchList
