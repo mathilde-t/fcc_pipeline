@@ -49,6 +49,7 @@ cfg = get_config("<config_name>")
 ```
 
 No changes to the analysis code are required when switching between datasets.
+Note : all barn values given, should be given in femto units.
 
 **3. Histogram production**
 The histogram maker contains the physics analysis logic, while all dataset-specific information is provided through the configuration system.
@@ -98,6 +99,6 @@ By default, this executes the workflow in the order:
 2. tree production,
 3. inclusive plot production.
 
-Individual stages can be executed when adding `--step` and specifying the stage to execute: `all, hist, tree`, or `plot`. `all` is the default setting.
+Individual stages can be executed when adding `--step` and specifying the stage to execute: `all`, `hist`, `tree`, or `plot`. `all` is the default setting.
 
-To choose a differnt plotting script, the `--mode` parameter can be added. It takes `inclusive, specific`, and `ntuple` corresponding to the tree plotting scripts. `inclusive` is the default.
+To choose a differnt plotting script, the `--mode` parameter can be added. It takes `inclusive`, `specific`, and `ntuple` corresponding to the tree plotting scripts. `inclusive` is the default.
