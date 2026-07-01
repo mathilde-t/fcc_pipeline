@@ -7,14 +7,6 @@ from utils_cli.path_utils import make_norm_dir_name
 cfg_name = os.environ["FCC_PIPELINE_CONFIG"]
 cfg = get_config(cfg_name)
 
-### debug
-# print("CONFIG name : ", cfg_name)
-# print("CONFIG name : ", cfg)
-#print("[DEBUG] cwd:", os.getcwd())
-#print("[DEBUG] FCC_PIPELINE_CONFIG:", os.environ.get("FCC_PIPELINE_CONFIG"))
-#print("[DEBUG] outputDir:", cfg.outputDir)
-#print("[DEBUG] inputDir:", cfg.inputDir)
-
 inputDir = cfg.inputDir
 outputDir = cfg.outputDir
 procDict = cfg.procDict
@@ -48,6 +40,11 @@ doScale = (sample_type == "central" and normalisationTag)
 if doScale:
     intLumi = intLumi
 
+# Create an empty stats file at the beginning of the run
+os.makedirs(outputDir, exist_ok=True)
+with open(os.path.join(outputDir, "histogram_stats.txt"), "w") as f:
+    f.write(f"outputDir: {outputDir}\n\n")
+
 # build_graph function that contains the analysis logic, cuts and histograms (mandatory)
 def build_graph(df, dataset):
 
@@ -57,11 +54,12 @@ def build_graph(df, dataset):
     if sample_type == "local" and normalisationTag:
         xs = processList[dataset]["crossSection"]
         event_weight = xs * intLumi / n_generated
-        df = df.Define("weight", f"{xs} * {intLumi} / {n_generated}")
+        weight = xs * intLumi / n_generated
+        df = df.Define("weight", f"{weight}")
     else: df = df.Define("weight", "1.0")
 
     weightsum = df.Sum("weight")
-    
+
     for lep in lep_list:
 
         df_lep = df
@@ -118,32 +116,65 @@ def build_graph(df, dataset):
         results.append(df_lep.Histo1D((f"{lep}_lep0_pt", "", *BINNING["p"]), f"{lep}_lep0_pt", "weight"))
         results.append(df_lep.Histo1D((f"{lep}_lep1_pt", "", *BINNING["p"]), f"{lep}_lep1_pt", "weight"))
 
-        ### debug
-        #h_unweighted = df_lep.Histo1D(
-        #    (f"{lep}_dilepton_m_unw", "", *BINNING["m"]),
-        #    f"{lep}_dilepton_m"
-        #)
-        #
-        #h_weighted = df_lep.Histo1D(
-        #    (f"{lep}_dilepton_m_w", "", *BINNING["m"]),
-        #    f"{lep}_dilepton_m",
-        #    "weight"
-        #)
-        #
-        #print("h_unweighted.GetName() :", h_unweighted.GetName())
-        #print("h_unweighted.GetName() :", h_weighted.GetName())
-        #
-        #print("Unweighted entries :", h_unweighted.GetEntries())
-        #print("Unweighted integral:", h_unweighted.Integral())
-        #
-        #print("Weighted entries   :", h_weighted.GetEntries())
-        #print("Weighted integral  :", h_weighted.Integral())
+        ### stats info printout
+        h_unweighted_dilepton_m = df_lep.Histo1D( 
+                                    (f"{lep}_dilepton_m_unw", "", *BINNING["m"]), 
+                                     f"{lep}_dilepton_m" ) 
+            
+        h_weighted_dilepton_m = df_lep.Histo1D( 
+                                     (f"{lep}_dilepton_m_w", "", *BINNING["m"]), 
+                                      f"{lep}_dilepton_m", "weight" )
+              
+        if lep in lep_list[-1]: # Only write stats for the last lepton in the list to avoid duplicate and unfinished entries
+            with open(os.path.join(outputDir, "histogram_stats.txt"), "a") as f:
+                f.write(f"=== Dataset: {dataset}, Lepton: {lep} ===\n\n")
         
-        #for h in results:
-        #    print("getName, GetEntries, Integral \t",
-        #        h.GetName(), "\t", 
-        #        h.GetEntries(), "\t", 
-        #        h.Integral(), "\t", 
-        #    )
+                f.write("|" + "=" * 60 + "|\n")
+                f.write("|" + f" Histogram (dilepton_m) {'Entries':>15}{'Integral':>15}" + f"{'|\n':>8}")
+                f.write("|" + "-" * 60 + "|\n")
+                #unweighted
+                f.write(
+                    "|" +
+                    f"{' Unweighted':<20}"
+                    f"{h_unweighted_dilepton_m.GetEntries():>15.0f}"
+                    f"{h_unweighted_dilepton_m.Integral():>15.1f}" +
+                    f"{'|\n':>12}"
+                )
+                #weighted
+                f.write(
+                    "|" +
+                    f"{' Weighted':<20}"
+                    f"{h_weighted_dilepton_m.GetEntries():>15.0f}"
+                    f"{h_weighted_dilepton_m.Integral():>15.1f}" +
+                    f"{'|\n':>12}"
+                )
+                f.write("|" + "=" * 60 + "|\n")
+                f.write(
+                        f"{'Note: unweighted: weight not applied, weighted: weight applied':<60}" + "\n"
+                        f"{'      (n=1 for no normalisation, n≠1 for normalisation)':<60}"
+                    )
+        
+                f.write("\n\n")
+        
+                f.write(f"--- Check integration for all histograms ---\n")
+        
+                f.write("|" + "=" * 75 + "|\n")
+                f.write("|" + f"{' Histogram':<20}" f"{'Entries':>15}" f"{'Integral':>15}{'Average Weight':>19}" + f"{'|\n':>8}")
+                f.write("|" + "-" * 75 + "|\n")
+                for h in results:
+                    entries = h.GetEntries()
+                    integral = h.Integral()
+                    average_weight = integral / entries if entries > 0 else 0.0
+                    f.write(
+                        "|" +
+                        f"{ h.GetName():<20}"
+                        f"{entries:>15.0f}"
+                        f"{integral:>15.1f}"
+                        f"{average_weight:>19.1f}" +
+                        f"{'|\n':>8}"
+                    )
+                f.write("|" + "=" * 75 + "|\n")
+        
+                f.write("\n\n")
 
     return results, weightsum
