@@ -7,14 +7,19 @@ in that order, it will plot the plots for mumu.
 import ROOT
 import os
 from scripts.config import get_config
+from utils_cli.path_utils import make_norm_dir_name
 
 cfg_name = os.environ["FCC_PIPELINE_CONFIG"]
 cfg = get_config(cfg_name)
 #cfg = get_config("local_prod_muon_only")
 
-sample_label = cfg.outputDir.split("/")[-1]
-inputDir = cfg.outputDir
-outdir = f"./output/plots/{sample_label}"
+inputDir = os.path.join(
+        "./output/histmaker/",
+        cfg.outputDir if not cfg.lumi_scaling["normalisation"] else make_norm_dir_name(cfg.outputDir),
+        cfg_name
+    )
+
+outdir = f"./output/plots/{cfg.outputDir}"
 os.makedirs(outdir, exist_ok=True)
 
 COLOR_MAP = {

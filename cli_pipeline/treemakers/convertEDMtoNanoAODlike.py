@@ -40,8 +40,10 @@ class RDFanalysis:
                 "weight",
                 "(double)__XSEC__ * (double)__INTLUMI__ / (double)__NGENERATED__"
             )
+            print("[INFO] enter local production line with normalisation")
         else:
             df = df.Define("weight", "1.0")
+            print("[INFO] enter central production line without normalisation")
 
         df = df.Alias(f"{LEPTON}_Idx", f"{LEPTON}_objIdx.index")
 

@@ -6,20 +6,30 @@ python plotmakers/plots_inclusive_fs__pyroot.py
 import ROOT
 import os
 from scripts.config import get_config
-from utils_cli.path_utils import make_norm_dir_name
+from utils_cli.path_utils import make_norm_dir_name, print_out_doubleline, print_out_line
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
 
-def run_inclusive_plots(cfg):
+def run_inclusive_plots(cfg, cfg_name):
 
     normalisationTag = cfg.lumi_scaling["normalisation"]
-    outputDir = cfg.outputDir
 
-    sample_label = outputDir.split("/")[-1]
-    inputDir = make_norm_dir_name(outputDir) if normalisationTag else outputDir
-    outdir = f"./output/plots/{sample_label}"
-    outdir = make_norm_dir_name(outdir) if normalisationTag else outdir
+    inputDir = os.path.join(
+        "./output/treemaker/",
+        cfg.outputDir if not normalisationTag else make_norm_dir_name(cfg.outputDir),
+        cfg_name
+    )
+    inputDir_hist = os.path.join(
+        "./output/histmaker/",
+        cfg.outputDir if not normalisationTag else make_norm_dir_name(cfg.outputDir),
+        cfg_name
+    )
+    outdir = os.path.join(
+        "./output/plots/",
+        cfg.outputDir if not normalisationTag else make_norm_dir_name(cfg.outputDir),
+        cfg_name
+    )
     os.makedirs(outdir, exist_ok=True)
 
     plot_meta = cfg.plotting
@@ -40,16 +50,6 @@ def run_inclusive_plots(cfg):
 
     formats = ["png", "pdf"]
 
-    def print_out_doubleline(title):
-        print("=" * 80)
-        print(title)
-        print("-" * 80)
-
-    def print_out_line():
-        print("=" * 80)
-        print("\n")
-
-
     ### open files & trees
     files = {}
     trees = {}
@@ -58,7 +58,12 @@ def run_inclusive_plots(cfg):
 
     for proc, info in cfg.processList.items():
 
-        path = f"{inputDir}/{proc}.root"
+        if sample_type == "local":
+            path = f"{inputDir}/{proc}.root"
+        else:
+            path = f"{inputDir_hist}/{proc}.root"
+        print(f"[INFO] opening {path} ...")
+
         f = ROOT.TFile.Open(path)
         files[proc] = f
 
@@ -273,7 +278,7 @@ def run_inclusive_plots(cfg):
         latex.SetNDC()
         latex.SetTextSize(0.04)
 
-        latex.DrawLatex(0.12, 0.96, sample_label)
+        latex.DrawLatex(0.12, 0.96, cfg_name)
         latex.DrawLatex(0.12, 0.92, ana_tex)
         latex.DrawLatex(0.68, 0.92, f"#sqrt{{s}} = {energy} GeV")
         if lumi_tex is not None:
@@ -284,8 +289,8 @@ def run_inclusive_plots(cfg):
             latex.DrawLatex(0.15, 0.78, "Luminosity scaled")
 
         ### save
-        file_name = f"{name}_{sample_label}"
-        file_name_norm = make_norm_dir_name(file_name) if normalisationTag else file_name
+        file_name = f"{name}__{cfg.outputDir}__{cfg_name}"
+        file_name_norm = file_name
 
         for fmt in formats:
             c.SaveAs(f"{outdir}/{file_name_norm}.{fmt}")

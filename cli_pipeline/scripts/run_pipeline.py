@@ -86,7 +86,7 @@ def main():
             )
         if args.mode == "inclusive":
             print("\n[MODE] inclusive")
-            run_inclusive_plots(cfg)
+            run_inclusive_plots(cfg, args.config)
         if args.mode == "ntuple":
             print("\n[MODE] ntuple")
             run_ntuple_plots(cfg)

@@ -7,16 +7,25 @@ from utils_cli.path_utils import make_norm_dir_name
 cfg_name = os.environ["FCC_PIPELINE_CONFIG"]
 cfg = get_config(cfg_name)
 
-inputDir = cfg.inputDir
-outputDir = cfg.outputDir
+normalisationTag = cfg.lumi_scaling["normalisation"]
+inputDir = os.path.join(
+        "./localSamples/",
+        cfg.inputDir
+    )
+print(f"[INFO] histmaker inputDir: {inputDir}")
+
+outputDir = os.path.join(
+        "./output/histmaker/",
+        cfg.outputDir if not normalisationTag else make_norm_dir_name(cfg.outputDir),
+        cfg_name
+    )
+print(f"[INFO] histmaker outputDir: {outputDir}")
+
 procDict = cfg.procDict
 processList = cfg.processList
 sample_type = cfg.sample_type
-normalisationTag = cfg.lumi_scaling["normalisation"]
 intLumi = cfg.lumi_scaling["intLumi"]
 n_generated = cfg.lumi_scaling["n_generated"]
-
-outputDir = make_norm_dir_name(outputDir) if normalisationTag else outputDir
 
 # Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics (mandatory)
 #if cfg.prodTag is not None:
