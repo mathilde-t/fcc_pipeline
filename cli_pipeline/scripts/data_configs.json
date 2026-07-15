@@ -1,7 +1,7 @@
 {
-    "local_prod_ee_mumu": {
+    "local_prod_ee_z_mumu_reco": {
         "inputDir": "diy",
-        "outputDir": "diy_samples_delphes",
+        "outputDir": "diy_samples_reco_delphes",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
@@ -33,7 +33,7 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
+            "normalisation": true,
             "intLumi": 17000,
             "n_generated": 5000
 
@@ -50,9 +50,9 @@
         
     },
 
-    "local_prod_ee_mumu_minus_z_res": {
+    "local_prod_ee_z_mumu_minus_z_res_reco": {
         "inputDir": "diy",
-        "outputDir": "diy_samples_delphes",
+        "outputDir": "diy_samples_reco_delphes",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
@@ -84,7 +84,7 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
+            "normalisation": true,
             "intLumi": 17000,
             "n_generated": 5000
 
@@ -101,9 +101,60 @@
         
     },
 
-    "central_prod_ee_mumu": {
+    "local_prod_ee_mumu_reco": {
+        "inputDir": "diy",
+        "outputDir": "diy_samples_reco_delphes",
+        "procDict": "./jsons/dummy.json",
+        "prodTag": null,
+        "sample_type": "local",
+        
+        "processList": {
+            "ee_ee_ecm91_delphes": {
+                "fraction": 1.0,
+                "crossSection": 4487600,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_mumu_ecm91_delphes": {
+                "fraction": 1.0,
+                "crossSection": 2024700,
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": true,
+            "intLumi": 17000,
+            "n_generated": 5000
+
+        },
+        
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "gen_or_reco": "reco",
+            "delphesVersion": "3.4.2",
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+        
+    },
+
+    "central_prod_ee_mumu_reco": {
         "inputDir": "wi23_idea_wzp6",
-        "outputDir": "wi23_idea_wzp6",
+        "outputDir": "wi23_idea_wzp6_reco",
         "procDict": "jsons/dummy_wi23_idea_wzp6.json",
         "prodTag": "FCCee/winter2023/IDEA/",
         "sample_type": "central",
@@ -158,7 +209,7 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
+            "normalisation": true,
             "intLumi": 17000,
             "theo_xs": null,
             "n_generated": null
