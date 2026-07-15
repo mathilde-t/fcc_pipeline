@@ -2,6 +2,8 @@
 run with : fccanalysis run treemakers/convertEDMtoNanoAODlike.py (called treemakers/tree.py in docs)
 '''
 
+from utils_cli.analysis_utils import *
+
 processList = {
     "__DATASET__": {"fraction": 1.0, "crossSection": __XSEC__,},
 }
@@ -14,7 +16,7 @@ inputDir = "__INPUTDIR__"
 outputDir = "__OUTPUTDIR__"
 
 
-includePaths = ["functions.h"]
+includePaths = ["functions.h", "namespace_particle.h"]
 
 nCPUS = 4
 compGroup = "group_u_FCC.local_gen"
@@ -30,56 +32,38 @@ class RDFanalysis:
 
         SAMPLETYPE = "__SAMPLETYPE__"
         NORMALISATIONTAG = __NORMALISATIONTAG__
+        GENORRECO = "__GENORRECO__"
 
-        print("NORMALISATIONTAG ",NORMALISATIONTAG)
-        print(type(NORMALISATIONTAG))
-        print(bool(NORMALISATIONTAG))
-
+        # apply normalisation weight if tag is set in data_configs.json
         if SAMPLETYPE == "local" and NORMALISATIONTAG:
             df = df.Define(
                 "weight",
                 "(double)__XSEC__ * (double)__INTLUMI__ / (double)__NGENERATED__"
             )
-            print("[INFO] enter local production line with normalisation")
+            print(f"[INFO] enter {GENORRECO} pipeline with normalisation")
         else:
             df = df.Define("weight", "1.0")
-            print("[INFO] enter central production line without normalisation")
+            print(f"[INFO] enter {GENORRECO} pipeline without normalisation")
 
-        df = df.Alias(f"{LEPTON}_Idx", f"{LEPTON}_objIdx.index")
+        # Define aliases and collections for gen and reco-levels specifically
+        if GENORRECO == "reco":
+            df = prepare_reco_collection(df, LEPTON, SAMPLETYPE, pt_cut=0, n_lep_cut=2, prefix="")
+        elif GENORRECO == "gen":
+            df = prepare_gen_collection(df, LEPTON, SAMPLETYPE, pt_cut=0, n_lep_cut=2, prefix="")
+        else:
+            raise ValueError(f"Unknown GENORRECO value: {GENORRECO}")
+        
+        particle_collection = "ReconstructedParticle" if GENORRECO == "reco" else "MCParticle"
+        cpp_type = "ReconstructedParticleData" if GENORRECO == "reco" else "MCParticleData"
+        Vec_rp = f"ROOT::VecOps::RVec<edm4hep::{cpp_type}>"
 
-        # print(sorted([str(c) for c in df.GetColumnNames() if "objIdx" in str(c)]))
-
-        df = df.Define("lep_all", f"FCCAnalyses::ReconstructedParticle::get({LEPTON}_Idx, ReconstructedParticles)")
-        df = df.Define("lep_pcut", "FCCAnalyses::ReconstructedParticle::sel_p(0)(lep_all)")
-
-
-        df = df.Define("dilepton_result", "fcc_pipeline::DYfunction::build_dilepton()(lep_pcut)")
-    
-        # define dilepton properties
-        df = df.Define("dilepton", "Vec_rp{dilepton_result[0]}")
-        df = df.Define("dilepton_m", "FCCAnalyses::ReconstructedParticle::get_mass(dilepton)[0]")
-        df = df.Define("dilepton_p", "FCCAnalyses::ReconstructedParticle::get_p(dilepton)[0]")
-
-        # define the two leptons that form the dilepton system
-        df = df.Define("dilepton_leps", "Vec_rp{dilepton_result[1], dilepton_result[2]}")
-        df = df.Define("lep_p", "FCCAnalyses::ReconstructedParticle::get_p(dilepton_leps)")
-        df = df.Define("lep0_p", "lep_p[0]")
-        df = df.Define("lep1_p", "lep_p[1]")
-
-        df = df.Define("lep0_eta", "FCCAnalyses::ReconstructedParticle::get_eta(dilepton_leps)[0]")
-        df = df.Define("lep1_eta", "FCCAnalyses::ReconstructedParticle::get_eta(dilepton_leps)[1]")
-
-        df = df.Define("lep0_phi", "FCCAnalyses::ReconstructedParticle::get_phi(dilepton_leps)[0]")
-        df = df.Define("lep1_phi", "FCCAnalyses::ReconstructedParticle::get_phi(dilepton_leps)[1]")
-
-        df = df.Define("lep0_pt", "FCCAnalyses::ReconstructedParticle::get_pt(dilepton_leps)[0]")
-        df = df.Define("lep1_pt", "FCCAnalyses::ReconstructedParticle::get_pt(dilepton_leps)[1]")
-
-        df = df.Filter("lep_pcut.size() >= 2")
-
+        df = build_dilepton(df, LEPTON, prefix="")
+        df = define_dilepton_observables(df, LEPTON, particle_collection, Vec_rp, prefix="")
+        df = define_lepton_observables(df, LEPTON, particle_collection, prefix="")
+        
         return df  
 
-
+# save output as flat nTuple
     def output():
 
         branchList = [
@@ -93,9 +77,12 @@ class RDFanalysis:
             "lep1_phi", 
             "lep0_pt",
             "lep1_pt",
-            "weight"
+            "weight",
+            "n_lep",
+            "lep_all_pt",
+            "px__wo__n_lep_cut",
+            "py__wo__n_lep_cut",
+            "pz__wo__n_lep_cut"
         ]
-
-        print("branchList : \t ", branchList[-1])
 
         return branchList

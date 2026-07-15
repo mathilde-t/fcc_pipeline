@@ -15,7 +15,10 @@ For locally produced samples:
 source /cvmfs/sw.hsf.org/key4hep/setup.sh
 ```
 
-For centrally produced samples, source the corresponding central production environment.
+For centrally produced samples, source the corresponding central production environment, e.g.:
+```bash
+source /cvmfs/sw.hsf.org/key4hep/setup.sh -r 2024-03-10
+```
 
 ---
 

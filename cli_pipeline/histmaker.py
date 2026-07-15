@@ -3,6 +3,7 @@ import os
 from scripts.config import get_config
 from scripts.hist_config import BINNING
 from utils_cli.path_utils import make_norm_dir_name
+from utils_cli.analysis_utils import *
 
 cfg_name = os.environ["FCC_PIPELINE_CONFIG"]
 cfg = get_config(cfg_name)
@@ -26,6 +27,7 @@ processList = cfg.processList
 sample_type = cfg.sample_type
 intLumi = cfg.lumi_scaling["intLumi"]
 n_generated = cfg.lumi_scaling["n_generated"]
+gen_or_reco = cfg.plotting["gen_or_reco"]
 
 # Production tag when running over EDM4Hep centrally produced events, this points to the yaml files for getting sample statistics (mandatory)
 #if cfg.prodTag is not None:
@@ -44,10 +46,113 @@ includePaths = ["functions.h"]
 # scale the histograms with the cross-section and integrated luminosity
 # for centrally produced samples, normalise here because the FCC framework expects so,
 # for locally produced samples, normalise while the histogram creation, as they are selfmade
-
 doScale = (sample_type == "central" and normalisationTag)
 if doScale:
     intLumi = intLumi
+
+
+### Helper functions ###
+# Helper function to choose if the weight application is done on the fly (local samples) or performed by the FCC FW (central samples)
+def weight_application(df, dataset):
+    if sample_type == "local" and normalisationTag:
+        xs = processList[dataset]["crossSection"]
+        weight = xs * intLumi / n_generated
+        return df.Define("weight", f"{weight}")
+    return df.Define("weight", "1.0")
+
+# Helper functions to build the lepton collection, apply the p-cut and build the dilepton system
+# now in utils
+
+# Helper function to build the histograms and write to file
+OBSERVABLES = [
+    ("dilepton_m", "m"),
+    ("dilepton_p", "p"),
+    ("lep0_p", "p"),
+    ("lep1_p", "p"),
+    ("lep0_eta", "eta"),
+    ("lep1_eta", "eta"),
+    ("lep0_phi", "phi"),
+    ("lep1_phi", "phi"),
+    ("lep0_pt", "p"),
+    ("lep1_pt", "p"),
+    ("n_lep", "n"),
+    ("lep_all_pt", "p"),
+    ("px__wo__n_lep_cut", "p_sym"),
+    ("py__wo__n_lep_cut", "p_sym"),
+    ("pz__wo__n_lep_cut", "p_sym"),
+]
+
+def build_histograms(df_lep, lep, results):
+    for variable, binning in OBSERVABLES:
+        results.append(df_lep.Histo1D((f"{lep}_{variable}", "", *BINNING[binning]), f"{lep}_{variable}", "weight"))
+    return results
+
+# Helper function to write the histogram statistics to a text file
+def write_histogram_stats(df_lep, lep, dataset, results, outputDir, lep_list):
+    ### stats info printout
+    h_unweighted_dilepton_m = df_lep.Histo1D( 
+                                (f"{lep}_dilepton_m_unw", "", *BINNING["m"]), 
+                                    f"{lep}_dilepton_m" ) 
+        
+    h_weighted_dilepton_m = df_lep.Histo1D( 
+                                    (f"{lep}_dilepton_m_w", "", *BINNING["m"]), 
+                                    f"{lep}_dilepton_m", "weight" )
+            
+    if lep == lep_list[-1]: # Only write stats for the last lepton in the list to avoid duplicate and unfinished entries
+        with open(os.path.join(outputDir, "histogram_stats.txt"), "a") as f:
+            f.write(f"=== Dataset: {dataset}, Lepton: {lep} ===\n\n")
+    
+            f.write("|" + "=" * 60 + "|\n")
+            f.write("|" + f" Histogram (dilepton_m) {'Entries':>15}{'Integral':>15}" + f"{'|\n':>8}")
+            f.write("|" + "-" * 60 + "|\n")
+            #unweighted
+            f.write(
+                "|" +
+                f"{' Unweighted':<20}"
+                f"{h_unweighted_dilepton_m.GetEntries():>15.0f}"
+                f"{h_unweighted_dilepton_m.Integral():>15.1f}" +
+                f"{'|\n':>12}"
+            )
+            #weighted
+            f.write(
+                "|" +
+                f"{' Weighted':<20}"
+                f"{h_weighted_dilepton_m.GetEntries():>15.0f}"
+                f"{h_weighted_dilepton_m.Integral():>15.1f}" +
+                f"{'|\n':>12}"
+            )
+            f.write("|" + "=" * 60 + "|\n")
+            f.write(
+                    f"{'Note: unweighted: weight not applied, weighted: weight applied':<60}" + "\n"
+                    f"{'      (n=1 for no normalisation, n≠1 for normalisation)':<60}"
+                )
+    
+            f.write("\n\n")
+    
+            f.write(f"--- Check integration for all histograms ---\n")
+    
+            f.write("|" + "=" * 75 + "|\n")
+            f.write("|" + f"{' Histogram':<20}" f"{'Entries':>15}" f"{'Integral':>15}{'Average Weight':>19}" + f"{'|\n':>8}")
+            f.write("|" + "-" * 75 + "|\n")
+            for h in results:
+                entries = h.GetEntries()
+                integral = h.Integral()
+                average_weight = integral / entries if entries > 0 else 0.0
+                f.write(
+                    "|" +
+                    f"{ h.GetName():<20}"
+                    f"{entries:>15.0f}"
+                    f"{integral:>15.1f}"
+                    f"{average_weight:>19.1f}" +
+                    f"{'|\n':>8}"
+                )
+            f.write("|" + "=" * 75 + "|\n")
+    
+            f.write("\n\n")
+
+
+
+### Main code execution ###
 
 # Create an empty stats file at the beginning of the run
 os.makedirs(outputDir, exist_ok=True)
@@ -58,132 +163,30 @@ with open(os.path.join(outputDir, "histogram_stats.txt"), "w") as f:
 def build_graph(df, dataset):
 
     results = []
-    event_weight = 1.0
 
-    if sample_type == "local" and normalisationTag:
-        xs = processList[dataset]["crossSection"]
-        event_weight = xs * intLumi / n_generated
-        weight = xs * intLumi / n_generated
-        df = df.Define("weight", f"{weight}")
-    else: df = df.Define("weight", "1.0")
-
+    df = weight_application(df, dataset)
     weightsum = df.Sum("weight")
 
     for lep in lep_list:
 
         df_lep = df
-
-        # collection aliases, different to local and central plots
-        if sample_type == "central":
-            df_lep = df_lep.Alias(f"{lep}_Idx", f"{lep}#0.index") #here1 central
-        elif sample_type == "local":
-            df_lep = df_lep.Alias(f"{lep}_Idx", f"{lep}_objIdx.index") #here1 local
+        
+        if gen_or_reco == "reco":
+            df_lep = prepare_reco_collection(df_lep, lep, sample_type, pt_cut=0, n_lep_cut=2)
+        elif gen_or_reco == "gen":
+            df_lep = prepare_gen_collection(df_lep, lep, sample_type, pt_cut=0, n_lep_cut=2)
         else:
-            raise ValueError(f"Unknown sample type: {sample_type}, indexing step")
-
+            raise ValueError(f"Unknown gen_or_reco value: {gen_or_reco}")
         
-        df_lep = df_lep.Define(f"{lep}_lep_all", f"FCCAnalyses::ReconstructedParticle::get({lep}_Idx, ReconstructedParticles)")
-        df_lep = df_lep.Define(f"{lep}_lep_pcut", f"FCCAnalyses::ReconstructedParticle::sel_p(0)({lep}_lep_all)")
+        particle_collection = "ReconstructedParticle" if gen_or_reco == "reco" else "MCParticle"
+        cpp_type = "ReconstructedParticleData" if gen_or_reco == "reco" else "MCParticleData"
+        Vec_rp = f"ROOT::VecOps::RVec<edm4hep::{cpp_type}>"
 
+        df_lep = build_dilepton(df_lep, lep)
+        df_lep = define_dilepton_observables(df_lep, lep, particle_collection, Vec_rp)
+        df_lep = define_lepton_observables(df_lep, lep, particle_collection)
 
-        # --- make code general for all leptons (electrons, muons, taus) ---
-
-        # build in functions    
-        df_lep = df_lep.Define(f"{lep}_dilepton_result", f"fcc_pipeline::DYfunction::build_dilepton()({lep}_lep_pcut)")
-        
-        # define dilepton properties
-        df_lep = df_lep.Define(f"{lep}_dilepton", f"Vec_rp{{{lep}_dilepton_result[0]}}")
-        df_lep = df_lep.Define(f"{lep}_dilepton_m", f"FCCAnalyses::ReconstructedParticle::get_mass({lep}_dilepton)[0]")
-        df_lep = df_lep.Define(f"{lep}_dilepton_p", f"FCCAnalyses::ReconstructedParticle::get_p({lep}_dilepton)[0]")
-
-        # define the two leptons that form the dilepton system
-        df_lep = df_lep.Define(f"{lep}_dilepton_leps", f"Vec_rp{{{lep}_dilepton_result[1], {lep}_dilepton_result[2]}}")
-        df_lep = df_lep.Define(f"{lep}_lep_p", f"FCCAnalyses::ReconstructedParticle::get_p({lep}_dilepton_leps)")
-        df_lep = df_lep.Define(f"{lep}_lep0_p", f"{lep}_lep_p[0]")
-        df_lep = df_lep.Define(f"{lep}_lep1_p", f"{lep}_lep_p[1]")
-
-        df_lep = df_lep.Define(f"{lep}_lep0_eta", f"FCCAnalyses::ReconstructedParticle::get_eta({lep}_dilepton_leps)[0]")
-        df_lep = df_lep.Define(f"{lep}_lep1_eta", f"FCCAnalyses::ReconstructedParticle::get_eta({lep}_dilepton_leps)[1]")
-
-        df_lep = df_lep.Define(f"{lep}_lep0_phi", f"FCCAnalyses::ReconstructedParticle::get_phi({lep}_dilepton_leps)[0]")
-        df_lep = df_lep.Define(f"{lep}_lep1_phi", f"FCCAnalyses::ReconstructedParticle::get_phi({lep}_dilepton_leps)[1]")
-
-        df_lep = df_lep.Define(f"{lep}_lep0_pt", f"FCCAnalyses::ReconstructedParticle::get_pt({lep}_dilepton_leps)[0]")
-        df_lep = df_lep.Define(f"{lep}_lep1_pt", f"FCCAnalyses::ReconstructedParticle::get_pt({lep}_dilepton_leps)[1]")
-        
-        df_lep = df_lep.Filter(f"{lep}_lep_pcut.size() >= 2")
-
-
-        results.append(df_lep.Histo1D((f"{lep}_dilepton_m", "", *BINNING["m"]), f"{lep}_dilepton_m", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_dilepton_p", "", *BINNING["p"]), f"{lep}_dilepton_p", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep0_p", "", *BINNING["p"]), f"{lep}_lep0_p", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep1_p", "", *BINNING["p"]), f"{lep}_lep1_p", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep0_eta", "", *BINNING["eta"]), f"{lep}_lep0_eta", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep1_eta", "", *BINNING["eta"]), f"{lep}_lep1_eta", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep0_phi", "", *BINNING["phi"]), f"{lep}_lep0_phi", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep1_phi", "", *BINNING["phi"]), f"{lep}_lep1_phi", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep0_pt", "", *BINNING["p"]), f"{lep}_lep0_pt", "weight"))
-        results.append(df_lep.Histo1D((f"{lep}_lep1_pt", "", *BINNING["p"]), f"{lep}_lep1_pt", "weight"))
-
-        ### stats info printout
-        h_unweighted_dilepton_m = df_lep.Histo1D( 
-                                    (f"{lep}_dilepton_m_unw", "", *BINNING["m"]), 
-                                     f"{lep}_dilepton_m" ) 
-            
-        h_weighted_dilepton_m = df_lep.Histo1D( 
-                                     (f"{lep}_dilepton_m_w", "", *BINNING["m"]), 
-                                      f"{lep}_dilepton_m", "weight" )
-              
-        if lep in lep_list[-1]: # Only write stats for the last lepton in the list to avoid duplicate and unfinished entries
-            with open(os.path.join(outputDir, "histogram_stats.txt"), "a") as f:
-                f.write(f"=== Dataset: {dataset}, Lepton: {lep} ===\n\n")
-        
-                f.write("|" + "=" * 60 + "|\n")
-                f.write("|" + f" Histogram (dilepton_m) {'Entries':>15}{'Integral':>15}" + f"{'|\n':>8}")
-                f.write("|" + "-" * 60 + "|\n")
-                #unweighted
-                f.write(
-                    "|" +
-                    f"{' Unweighted':<20}"
-                    f"{h_unweighted_dilepton_m.GetEntries():>15.0f}"
-                    f"{h_unweighted_dilepton_m.Integral():>15.1f}" +
-                    f"{'|\n':>12}"
-                )
-                #weighted
-                f.write(
-                    "|" +
-                    f"{' Weighted':<20}"
-                    f"{h_weighted_dilepton_m.GetEntries():>15.0f}"
-                    f"{h_weighted_dilepton_m.Integral():>15.1f}" +
-                    f"{'|\n':>12}"
-                )
-                f.write("|" + "=" * 60 + "|\n")
-                f.write(
-                        f"{'Note: unweighted: weight not applied, weighted: weight applied':<60}" + "\n"
-                        f"{'      (n=1 for no normalisation, n≠1 for normalisation)':<60}"
-                    )
-        
-                f.write("\n\n")
-        
-                f.write(f"--- Check integration for all histograms ---\n")
-        
-                f.write("|" + "=" * 75 + "|\n")
-                f.write("|" + f"{' Histogram':<20}" f"{'Entries':>15}" f"{'Integral':>15}{'Average Weight':>19}" + f"{'|\n':>8}")
-                f.write("|" + "-" * 75 + "|\n")
-                for h in results:
-                    entries = h.GetEntries()
-                    integral = h.Integral()
-                    average_weight = integral / entries if entries > 0 else 0.0
-                    f.write(
-                        "|" +
-                        f"{ h.GetName():<20}"
-                        f"{entries:>15.0f}"
-                        f"{integral:>15.1f}"
-                        f"{average_weight:>19.1f}" +
-                        f"{'|\n':>8}"
-                    )
-                f.write("|" + "=" * 75 + "|\n")
-        
-                f.write("\n\n")
+        results = build_histograms(df_lep, lep, results)
+        write_histogram_stats(df_lep, lep, dataset, results, outputDir, lep_list)
 
     return results, weightsum

@@ -5,11 +5,12 @@ python plotmakers/plots_inclusive_fs__pyroot.py
 
 import ROOT
 import os
-from scripts.config import get_config
 from utils_cli.path_utils import make_norm_dir_name, print_out_doubleline, print_out_line
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
+ROOT.gStyle.SetTitleX(0.6)
+ROOT.gStyle.SetTitleY(0.85)
 
 def run_inclusive_plots(cfg, cfg_name):
 
@@ -276,7 +277,7 @@ def run_inclusive_plots(cfg, cfg_name):
 
         latex = ROOT.TLatex()
         latex.SetNDC()
-        latex.SetTextSize(0.04)
+        latex.SetTextSize(0.033)
 
         latex.DrawLatex(0.12, 0.96, cfg_name)
         latex.DrawLatex(0.12, 0.92, ana_tex)
@@ -289,8 +290,8 @@ def run_inclusive_plots(cfg, cfg_name):
             latex.DrawLatex(0.15, 0.78, "Luminosity scaled")
 
         ### save
-        file_name = f"{name}__{cfg.outputDir}__{cfg_name}"
-        file_name_norm = file_name
+        file_name = f"{name}__{cfg_name}"
+        file_name_norm = file_name if not normalisationTag else make_norm_dir_name(file_name)
 
         for fmt in formats:
             c.SaveAs(f"{outdir}/{file_name_norm}.{fmt}")

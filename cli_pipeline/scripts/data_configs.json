@@ -50,6 +50,57 @@
         
     },
 
+    "local_prod_ee_z_mumu_gen": {
+        "inputDir": "diy",
+        "outputDir": "diy_samples_gen",
+        "procDict": "./jsons/dummy.json",
+        "prodTag": null,
+        "sample_type": "local",
+        
+        "processList": {
+            "ee_z_ee_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 2012600,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_z_mumu_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 2012600,
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": true,
+            "intLumi": 17000,
+            "n_generated": 5000
+
+        },
+        
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow Z #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "gen_or_reco": "gen",
+            "delphesVersion": "3.4.2",
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+        
+    },
+
     "local_prod_ee_z_mumu_minus_z_res_reco": {
         "inputDir": "diy",
         "outputDir": "diy_samples_reco_delphes",
@@ -101,6 +152,57 @@
         
     },
 
+    "local_prod_ee_z_mumu_minus_z_res_gen": {
+        "inputDir": "diy",
+        "outputDir": "diy_samples_gen",
+        "procDict": "./jsons/dummy.json",
+        "prodTag": null,
+        "sample_type": "local",
+        
+        "processList": {
+            "ee_ee_minus_z_res_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 2516100,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_mumu_minus_z_res_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 10764,
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": false,
+            "intLumi": 17000,
+            "n_generated": 5000
+
+        },
+        
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-} w#/o Z-resonance",
+            "gen_or_reco": "gen",
+            "delphesVersion": "3.4.2",
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+        
+    },
+
     "local_prod_ee_mumu_reco": {
         "inputDir": "diy",
         "outputDir": "diy_samples_reco_delphes",
@@ -145,6 +247,57 @@
             "intLumiLabel": "L = 17 ab^{-1}",
             "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
             "gen_or_reco": "reco",
+            "delphesVersion": "3.4.2",
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+        
+    },
+
+    "local_prod_ee_mumu_gen": {
+        "inputDir": "diy",
+        "outputDir": "diy_samples_gen",
+        "procDict": "./jsons/dummy.json",
+        "prodTag": null,
+        "sample_type": "local",
+        
+        "processList": {
+            "ee_ee_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 4487600,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_mumu_ecm91": {
+                "fraction": 1.0,
+                "crossSection": 2024700,
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": false,
+            "intLumi": 17000,
+            "n_generated": 5000
+
+        },
+        
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "gen_or_reco": "gen",
             "delphesVersion": "3.4.2",
             "energy": 91.2,
             "plotStatUnc": true
@@ -220,6 +373,81 @@
             "intLumiLabel": "L = 17 ab^{-1}",
             "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
             "gen_or_reco": "reco",
+            "delphesVersion": null,
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+    },
+
+    "central_prod_ee_mumu_gen": {
+        "inputDir": "wi23_idea_wzp6",
+        "outputDir": "wi23_idea_wzp6_gen",
+        "procDict": "jsons/dummy_wi23_idea_wzp6.json",
+        "prodTag": "FCCee/winter2023/IDEA/",
+        "sample_type": "central",
+
+        "processList": {
+            "ee_events_193158988": {
+                "fraction": 1.0, 
+                "crossSection": 3273820,
+                "lep": "Electron",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "ee_events_194455359": {
+                "fraction": 1.0, 
+                "crossSection": 3273820, 
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            },
+
+            "mumu_events_196687800": {
+                "fraction": 1.0, 
+                "crossSection": 1462080, 
+                "lep": "Electron",
+            
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "mumu_events_197347757": {
+                "fraction": 1.0, 
+                "crossSection": 1462080, 
+                "lep": "Muon",
+
+                "plot": {
+                    "legend": "#mu^{+}#mu^{-}",
+                    "color": "blue",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": true,
+            "intLumi": 17000,
+            "theo_xs": null,
+            "n_generated": null
+
+        },
+
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "gen_or_reco": "gen",
             "delphesVersion": null,
             "energy": 91.2,
             "plotStatUnc": true

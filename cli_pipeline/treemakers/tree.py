@@ -61,6 +61,7 @@ for dataset, info in cfg.processList.items():
     content = content.replace("__NORMALISATIONTAG__", str(cfg.lumi_scaling["normalisation"]))
     content = content.replace("__INTLUMI__", str(cfg.lumi_scaling["intLumi"]))
     content = content.replace("__NGENERATED__", str(cfg.lumi_scaling["n_generated"]))
+    content = content.replace("__GENORRECO__", str(cfg.plotting["gen_or_reco"]))
 
     with open(output_script, "w") as f:
         f.write(content)
@@ -71,19 +72,6 @@ for dataset, info in cfg.processList.items():
     print(f"Running: {cmd}")
 
     os.system(cmd)
-    #print("="*80)
-    #print(open(output_script).read())
-    #print("="*80)
-
+    
     # cleanup
     os.remove(output_script)
-
-    import glob
-
-    print("[DEBUG] inputDir =", inputDir)
-    print("[DEBUG] exists =", os.path.exists(inputDir))
-    print("[DEBUG] files =", glob.glob(inputDir + "/*.root"))
-
-    print("[DEBUG] outputDir =", outputDir)
-    print("[DEBUG] exists =", os.path.exists(outputDir))
-    print("[DEBUG] files =", glob.glob(outputDir + "/*.root"))
