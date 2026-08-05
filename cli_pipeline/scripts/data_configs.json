@@ -11,6 +11,7 @@
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -23,6 +24,7 @@
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -34,9 +36,7 @@
 
         "lumi_scaling":{
             "normalisation": true,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -62,6 +62,7 @@
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -74,7 +75,7 @@
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Muon",
-
+                "fs": "mu",
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
                     "color": "blue",
@@ -85,9 +86,7 @@
 
         "lumi_scaling":{
             "normalisation": true,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -113,6 +112,7 @@
                 "fraction": 1.0,
                 "crossSection": 2516100,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -125,6 +125,7 @@
                 "fraction": 1.0,
                 "crossSection": 10764,
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -136,9 +137,7 @@
 
         "lumi_scaling":{
             "normalisation": true,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -164,6 +163,7 @@
                 "fraction": 1.0,
                 "crossSection": 2516100,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -176,6 +176,7 @@
                 "fraction": 1.0,
                 "crossSection": 10764,
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -186,10 +187,8 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "normalisation": true,
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -215,6 +214,7 @@
                 "fraction": 1.0,
                 "crossSection": 4487600,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -227,6 +227,7 @@
                 "fraction": 1.0,
                 "crossSection": 2024700,
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -238,9 +239,7 @@
 
         "lumi_scaling":{
             "normalisation": true,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -266,6 +265,7 @@
                 "fraction": 1.0,
                 "crossSection": 4487600,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -278,6 +278,7 @@
                 "fraction": 1.0,
                 "crossSection": 2024700,
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -288,10 +289,8 @@
         },
 
         "lumi_scaling":{
-            "normalisation": false,
-            "intLumi": 17000,
-            "n_generated": 5000
-
+            "normalisation": true,
+            "intLumi": 17000
         },
         
         "plotting":{
@@ -317,6 +316,7 @@
                 "fraction": 1.0, 
                 "crossSection": 3273820,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -329,6 +329,7 @@
                 "fraction": 1.0, 
                 "crossSection": 3273820, 
                 "lep": "Muon",
+                "fs": "e",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -341,6 +342,7 @@
                 "fraction": 1.0, 
                 "crossSection": 1462080, 
                 "lep": "Electron",
+                "fs": "mu",
             
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -352,6 +354,7 @@
                 "fraction": 1.0, 
                 "crossSection": 1462080, 
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -364,9 +367,58 @@
         "lumi_scaling":{
             "normalisation": true,
             "intLumi": 17000,
-            "theo_xs": null,
-            "n_generated": null
+            "theo_xs": null
+        },
 
+        "plotting":{
+            "intLumiLabel": "L = 17 ab^{-1}",
+            "ana_tex": "e^{+}e^{-} #rightarrow e^{+}e^{-}, #mu^{+}#mu^{-}",
+            "gen_or_reco": "reco",
+            "delphesVersion": null,
+            "energy": 91.2,
+            "plotStatUnc": true
+        }
+    },
+
+    "central_prod_ee_mumu_reco_test": {
+        "inputDir": "wi23_idea_wzp6",
+        "outputDir": "wi23_idea_wzp6_reco",
+        "procDict": "jsons/dummy_wi23_idea_wzp6.json",
+        "prodTag": "FCCee/winter2023/IDEA/",
+        "sample_type": "central",
+
+        "processList": {
+            "ee_events_193158988": {
+                "fraction": 1.0, 
+                "crossSection": 3273820,
+                "lep": "Electron",
+                "fs": "e",
+
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            },
+
+            "mumu_events_196687800": {
+                "fraction": 1.0, 
+                "crossSection": 1462080,
+                "lep": "Muon",
+                "fs": "mu", 
+            
+                "plot": {
+                    "legend": "e^{+}e^{-}",
+                    "color": "red",
+                    "type": "signal"
+                }
+            }
+        },
+
+        "lumi_scaling":{
+            "normalisation": true,
+            "intLumi": 17000,
+            "theo_xs": null
         },
 
         "plotting":{
@@ -391,6 +443,7 @@
                 "fraction": 1.0, 
                 "crossSection": 3273820,
                 "lep": "Electron",
+                "fs": "e",
 
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -403,6 +456,7 @@
                 "fraction": 1.0, 
                 "crossSection": 3273820, 
                 "lep": "Muon",
+                "fs": "e",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -415,6 +469,7 @@
                 "fraction": 1.0, 
                 "crossSection": 1462080, 
                 "lep": "Electron",
+                "fs": "mu",
             
                 "plot": {
                     "legend": "e^{+}e^{-}",
@@ -427,6 +482,7 @@
                 "fraction": 1.0, 
                 "crossSection": 1462080, 
                 "lep": "Muon",
+                "fs": "mu",
 
                 "plot": {
                     "legend": "#mu^{+}#mu^{-}",
@@ -439,9 +495,7 @@
         "lumi_scaling":{
             "normalisation": true,
             "intLumi": 17000,
-            "theo_xs": null,
-            "n_generated": null
-
+            "theo_xs": null
         },
 
         "plotting":{

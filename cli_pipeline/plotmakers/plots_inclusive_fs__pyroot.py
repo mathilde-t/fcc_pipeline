@@ -282,12 +282,13 @@ def run_inclusive_plots(cfg, cfg_name):
         latex.DrawLatex(0.12, 0.96, cfg_name)
         latex.DrawLatex(0.12, 0.92, ana_tex)
         latex.DrawLatex(0.68, 0.92, f"#sqrt{{s}} = {energy} GeV")
-        if lumi_tex is not None:
-            latex.DrawLatex(0.69, 0.96, lumi_tex)
+        #if lumi_tex is not None:
+        #    latex.DrawLatex(0.69, 0.96, lumi_tex)
         latex.DrawLatex(0.15, 0.82, level)
         if normalisationTag:
-            latex.SetTextSize(0.028)
-            latex.DrawLatex(0.15, 0.78, "Luminosity scaled")
+            #latex.SetTextSize(0.028)
+            #latex.DrawLatex(0.15, 0.78, "Luminosity scaled")
+            latex.DrawLatex(0.69, 0.96, lumi_tex)
 
         ### save
         file_name = f"{name}__{cfg_name}"

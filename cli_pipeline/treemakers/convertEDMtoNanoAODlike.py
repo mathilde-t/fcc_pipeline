@@ -34,16 +34,13 @@ class RDFanalysis:
         NORMALISATIONTAG = __NORMALISATIONTAG__
         GENORRECO = "__GENORRECO__"
 
-        # apply normalisation weight if tag is set in data_configs.json
-        if SAMPLETYPE == "local" and NORMALISATIONTAG:
+        if NORMALISATIONTAG:
             df = df.Define(
                 "weight",
                 "(double)__XSEC__ * (double)__INTLUMI__ / (double)__NGENERATED__"
             )
-            print(f"[INFO] enter {GENORRECO} pipeline with normalisation")
         else:
             df = df.Define("weight", "1.0")
-            print(f"[INFO] enter {GENORRECO} pipeline without normalisation")
 
         # Define aliases and collections for gen and reco-levels specifically
         if GENORRECO == "reco":
@@ -85,4 +82,5 @@ class RDFanalysis:
             "pz__wo__n_lep_cut"
         ]
 
+        branchList = ["weight"]
         return branchList
