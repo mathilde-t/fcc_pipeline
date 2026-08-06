@@ -79,10 +79,10 @@ for dataset, info in cfg.processList.items():
     os.makedirs(outputDir, exist_ok=True)
     print(f"[INFO] save tree to outputDir: {outputDir}")
     content = content.replace("__OUTPUTDIR__", outputDir)
-    content = content.replace(
-        "__PRODTAG__",
-        f'prodTag = "{cfg.prodTag}"' if cfg.prodTag else ""
-    )
+    #content = content.replace(
+    #    "__PRODTAG__",
+    #    f'prodTag = "{cfg.prodTag}"' if cfg.prodTag else ""
+    #)
     content = content.replace("__SAMPLETYPE__", cfg.sample_type)
     content = content.replace("__NORMALISATIONTAG__", str(cfg.lumi_scaling["normalisation"]))
     content = content.replace("__INTLUMI__", str(cfg.lumi_scaling["intLumi"]))

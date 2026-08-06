@@ -1,5 +1,5 @@
 #ifndef DYFUNCTIONS_H
-#define DYFUNCTIONS_H 
+#define DYFUNCTIONS_H
 
 #include <algorithm>
 #include <cmath>
@@ -22,9 +22,19 @@ struct build_dilepton {
 
     build_dilepton() {}
 
-    // Idea : leptons → sorted leptons → build dilepton
-    // output : dilepton object + p sorted leading leptons
-    // compatible with both ReconstructedParticleData (reco-level) and MCParticleData (gen-level)
+    // Build dilepton candidate from the two highest momentum leptons
+    //
+    // Output convention:
+    //
+    // out[0] : dilepton system
+    // out[1] : leading lepton
+    // out[2] : subleading lepton
+    //
+    // If fewer than two leptons exist:
+    // return empty vector
+    //
+    // Validity can later be checked with:
+    // collection.size() == 3
 
     template <typename Particle>
     ROOT::VecOps::RVec<Particle>
@@ -32,14 +42,12 @@ struct build_dilepton {
 
         ROOT::VecOps::RVec<Particle> out;
 
-        // require at least two leptons to build a dilepton system
-        // otherwise no valid dilepton candidate exists
-        if (leptons.size() < 2)
+        // no valid dilepton candidate
+        if (leptons.size() < 2) {
             return out;
+        }
 
-
-        // 1. Sort leptons by momentum magnitude
-        // The two highest momentum leptons are used to build the dilepton system
+        // momentum magnitude used for sorting
         auto p = [](const auto& v) {
             return std::sqrt(
                 v.momentum.x * v.momentum.x +
@@ -48,7 +56,7 @@ struct build_dilepton {
             );
         };
 
-
+        // sort descending in momentum
         std::sort(
             leptons.begin(),
             leptons.end(),
@@ -57,14 +65,16 @@ struct build_dilepton {
             }
         );
 
+        // take leading 2 os leptons
+        if (leptons[0].charge == leptons[1].charge) {
+            return out;
+        }
 
-        // 2. Build dilepton four-vector from the two leading leptons
+        // build four-vector sum
         TLorentzVector sum;
 
         for (int i = 0; i < 2; i++) {
-
             TLorentzVector v;
-
             v.SetXYZM(
                 leptons[i].momentum.x,
                 leptons[i].momentum.y,
@@ -75,8 +85,7 @@ struct build_dilepton {
             sum += v;
         }
 
-
-        // 3. Create output particle for the dilepton system
+        // create dilepton object
         Particle dilep{};
 
         dilep.momentum.x = sum.Px();
@@ -85,25 +94,26 @@ struct build_dilepton {
 
         dilep.mass = sum.M();
 
-        // ReconstructedParticleData contains an energy member
-        // MCParticleData does not need to store the energy here
-        if constexpr (std::is_same_v<Particle, edm4hep::ReconstructedParticleData>) {
+
+        // ReconstructedParticleData has energy
+        // MCParticleData does not
+        if constexpr (
+            std::is_same_v<
+                Particle,
+                edm4hep::ReconstructedParticleData
+            >
+        ) {
             dilep.energy = sum.E();
         }
 
+        // store:
+        // [0] dilepton
+        // [1] leading lepton
+        // [2] subleading lepton
 
-        // 4. Store dilepton first
-        // output convention:
-        // [0] = dilepton system
-        // [1] = leading lepton
-        // [2] = subleading lepton
         out.push_back(dilep);
-
-
-        // 5. Store the two leptons used for the dilepton afterwards
         out.push_back(leptons[0]);
         out.push_back(leptons[1]);
-
 
         return out;
     }
