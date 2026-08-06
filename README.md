@@ -22,7 +22,7 @@ source /cvmfs/sw.hsf.org/key4hep/setup.sh -r 2024-03-10
 
 ---
 
-## Pipeline explication and usage of the stepwise execution
+## Pipeline explanation and usage of the stepwise execution
 
 All commands below should be executed from `fcc_pipeline/stepwise_pipeline/`. 
 The command-line interface described later is launched from `fcc_pipeline/cli_pipeline/`.
@@ -44,6 +44,7 @@ All dataset-dependent settings are centralised in a set of configuration files:
 * `scripts/hist_config.py` – histogram definitions and binning
 * `scripts/plot_config.py` – plotting configuration
 * `scripts/config.py` – configuration interface providing `get_config()` (should normally not be modified)
+* `scripts/lep_list.py` – definition of the final-state leptons considered in the analysis
 
 The analysis is configured simply by selecting
 
@@ -52,10 +53,25 @@ cfg = get_config("<config_name>")
 ```
 
 No changes to the analysis code are required when switching between datasets.
-Note : all barn values given, should be given in femto units.
+
+If the analysis needs to be run for multiple configurations, analysis steps, or plotting modes, running `run_configs.sh` after adapting the required settings facilitates the task.
+
+Notes:
+* All cross sections and luminosities must be provided in femtobarn units.
+* The tree production step also performs the luminosity normalisation.
+    * The generated event counts are determined directly from the input EDM4Hep files and summed per final state before calculating the event weights:
+    
+    \[
+    w = \frac{\sigma \cdot \mathcal{L}}{N_\mathrm{generated}}
+    \]
+    
+    This ensures a consistent normalisation when several input files contribute to the same physics final state.
 
 **3. Histogram production**
 The histogram maker contains the physics analysis logic, while all dataset-specific information is provided through the configuration system.
+
+Note:
+The histogram production code is frozen at commit [a901fd3](https://github.com/mathilde-t/fcc_pipeline/commit/a901fd3e7a35ee09ee8f44662e0b551122600dfb). The analysis logic is contained in `histmaker.py` and its corresponding dataset configuration in `scripts/data_configs.json`.
 
 Run:
 ```bash
@@ -73,9 +89,20 @@ fccanalysis run treemakers/tree.py
 **5. Plot production**
 Several plotting scripts are available depending on the desired output:
 
-* `plots_specific_fs__FCC_FW.py` uses the built-in FCCAnalysis plotting utilities to produce plots for a single final state
-* `plots_inclusive_fs__pyroot.py` combines several final states using PyROOT
-* `plot_nTuple.py` is a lightweight Python plotting script intended for quick studies and cross-checks
+* `plots_specific_fs__FCC_FW.py` uses the built-in FCCAnalysis plotting utilities to produce plots for a single final state.
+* `plots_inclusive_fs__pyroot.py` combines several final states into inclusive distributions using PyROOT.
+* `plot_nTuple.py` is a lightweight Python plotting script intended for quick studies and cross-checks.
+* `plots_pyroot.py` provides ROOT-based plotting per histogram, displaying all final states in a common plot.
+* `plots_categorisation.py` provides plots like the above but category-based.
+* `plots_ratio_local_to_central.py` compares histograms from locally produced and centrally produced samples.
+* `plots_closure_local.py` performs closure tests of individually produced samples, representing different categories.
+* `plot_ak_var_per_level_plus_ratio.py` provides ak.array-based plotting per histogram, comparing local and central samples and showing their ratio for individual final states.
+
+Helper scripts for plot and binning configurations are: `scripts/plot_config.sh`, `scripts/hist_config.sh`.
+
+Run:
+```bash
+fccanalysis plots plotmakers/plots_<config_name>.py
 
 Run:
 ```bash
@@ -104,4 +131,4 @@ By default, this executes the workflow in the order:
 
 Individual stages can be executed when adding `--step` and specifying the stage to execute: `all`, `hist`, `tree`, or `plot`. `all` is the default setting.
 
-To choose a differnt plotting script, the `--mode` parameter can be added. It takes `inclusive`, `specific`, and `ntuple` corresponding to the tree plotting scripts. `inclusive` is the default.
+To choose a different plotting script, the `--mode` parameter can be added. It takes `inclusive`, `specific`, and `ntuple` corresponding to the tree plotting scripts. `inclusive` is the default.
