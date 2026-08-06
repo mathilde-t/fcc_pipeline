@@ -1,4 +1,7 @@
 """
+Pyroot plotting script to plot local samples from the treemaker output (self computed) 
+and central samples from the histmaker output (FCC computed).
+
 Run with:
 python plotmakers/plots_inclusive_fs__pyroot.py
 """
@@ -27,7 +30,7 @@ def run_inclusive_plots(cfg, cfg_name):
         cfg_name
     )
     outdir = os.path.join(
-        "./output/plots/",
+        "./output/plots_root/",
         cfg.outputDir if not normalisationTag else make_norm_dir_name(cfg.outputDir),
         cfg_name
     )
@@ -109,7 +112,12 @@ def run_inclusive_plots(cfg, cfg_name):
         h = ROOT.TH1F(hname, var, nbins, xmin, xmax)
         h.Sumw2()
 
-        tree.Draw(f"{var}>>{hname}", "weight", "goff")
+        branch = var
+
+        if tree.GetBranch(f"{lep}_{var}"):
+            branch = f"{lep}_{var}"
+
+        tree.Draw(f"{branch}>>{hname}", "weight", "goff")
 
         if xtitle is not None:
             h.GetXaxis().SetTitle(xtitle)
@@ -214,14 +222,11 @@ def run_inclusive_plots(cfg, cfg_name):
                 h = get_hist(
                     f,
                     hname,
-                    xtitle=cfg_hist["xtitle"],
-                    ytitle=cfg_hist["ytitle"],
-                    ymin=cfg_hist["ymin"],
-                    ymax=cfg_hist["ymax"],
+                    xtitle=cfg_hist["xtitle"], 
+                    ytitle=cfg_hist["ytitle"], 
+                    ymin=cfg_hist["ymin"], 
+                    ymax=cfg_hist["ymax"]
                 )
-
-                if h is None:
-                    continue
 
 
             if lep == "Electron":

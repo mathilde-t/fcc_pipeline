@@ -7,6 +7,7 @@ from plotmakers.plots_inclusive_fs__pyroot import run_inclusive_plots
 from plotmakers.plot_nTuple import run_ntuple_plots
 from plotmakers.plots_pyroot import run_allpr_plots
 from plotmakers.plots_categorisation import run_category_plots
+from plotmakers.plot_ak_var_per_level_plus_ratio import run_ak_plots
 
 def parse_arg():
     parser = argparse.ArgumentParser()
@@ -30,8 +31,8 @@ def parse_arg():
         "--mode",
         type = str,
         default = "inclusive",
-        choices=["inclusive", "specific", "ntuple", "allpr", "cat", "ratio"],
-        help="Plot mode selection : incluive(2 signals), specific(1 signal), nTuple(ee+mumu), allpr(with pyroot), cat(category plots for central samples), ratio(ratio plots per hists))"
+        choices=["inclusive", "specific", "ntuple", "allpr", "cat", "ratio", "closure", "ak"],
+        help="Plot mode selection : incluive(2 signals), specific(1 signal), nTuple(ee+mumu), allpr(with pyroot), cat(category plots for central samples), ratio(ratio plots per hists), closure(closure test for local line), ak(merged plot with ak, per hist, local vs central)"
     )
 
     return parser.parse_args()
@@ -113,6 +114,20 @@ def main():
                 env=env,
             )
 
+        if args.mode == "closure":
+            print("\n[MODE] closure test")
+            subprocess.run(
+                [
+                    "python",
+                    "plotmakers/plots_closure_local.py"
+                ],
+                check=True,
+                env=env,
+            )
+
+        if args.mode == "ak":
+            print("\n[MODE] merged plot with ak")
+            run_ak_plots(cfg, args.config)
     
 
     print("\n[DONE] Pipeline finished")
