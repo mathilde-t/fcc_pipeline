@@ -5,6 +5,8 @@ from scripts.config import get_config
 
 from plotmakers.plots_inclusive_fs__pyroot import run_inclusive_plots
 from plotmakers.plot_nTuple import run_ntuple_plots
+from plotmakers.plots_pyroot import run_allpr_plots
+from plotmakers.plots_categorisation import run_category_plots
 
 def parse_arg():
     parser = argparse.ArgumentParser()
@@ -28,8 +30,8 @@ def parse_arg():
         "--mode",
         type = str,
         default = "inclusive",
-        choices=["inclusive", "specific", "ntuple"],
-        help="Plot mode selection : nTuple(ee+mumu), incluive(2 signals), specific(1 signal)"
+        choices=["inclusive", "specific", "ntuple", "allpr", "cat", "ratio"],
+        help="Plot mode selection : incluive(2 signals), specific(1 signal), nTuple(ee+mumu), allpr(with pyroot), cat(category plots for central samples), ratio(ratio plots per hists))"
     )
 
     return parser.parse_args()
@@ -87,9 +89,30 @@ def main():
         if args.mode == "inclusive":
             print("\n[MODE] inclusive")
             run_inclusive_plots(cfg, args.config)
+
+        if args.mode == "allpr":
+            print("\n[MODE] all pyroot")
+            run_allpr_plots(cfg, args.config)
+
+        if args.mode == "cat":
+            print("\n[MODE] category plots")
+            run_category_plots(cfg, args.config)
+
         if args.mode == "ntuple":
             print("\n[MODE] ntuple")
             run_ntuple_plots(cfg)
+
+        if args.mode == "ratio":
+            print("\n[MODE] ratio plots")
+            subprocess.run(
+                [
+                    "python",
+                    "plotmakers/plots_ratio_local_to_central.py"
+                ],
+                check=True,
+                env=env,
+            )
+
     
 
     print("\n[DONE] Pipeline finished")
