@@ -6,6 +6,7 @@
 #include <math.h>
 #include <vector>
 #include <type_traits>
+#include <random>
 
 #include "TLorentzVector.h"
 #include "ROOT/RVec.hxx"
@@ -118,6 +119,43 @@ struct build_dilepton {
         return out;
     }
 };
+
+template <typename Particle>
+ROOT::VecOps::RVec<Particle>
+sort_pt(ROOT::VecOps::RVec<Particle> particles) {
+
+    // Randomise the initial ordering
+    static thread_local std::mt19937 rng(std::random_device{}());
+
+    std::shuffle(
+        particles.begin(),
+        particles.end(),
+        rng
+    );
+
+    // Sort by descending pT.
+    // For equal pT, stable_sort keeps the random order.
+    std::stable_sort(
+        particles.begin(),
+        particles.end(),
+        [](const auto& a, const auto& b) {
+
+            const float pt_a = std::sqrt(
+                a.momentum.x * a.momentum.x +
+                a.momentum.y * a.momentum.y
+            );
+
+            const float pt_b = std::sqrt(
+                b.momentum.x * b.momentum.x +
+                b.momentum.y * b.momentum.y
+            );
+
+            return pt_a > pt_b;
+        }
+    );
+
+    return particles;
+}
 
 } // namespace DYfunction
 } // namespace fcc_pipeline

@@ -32,7 +32,15 @@ def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, prefix=N
     df = df.Define(f"{prefix}stable", "FCCAnalyses::MCParticle::sel_genStatus(1)(Particle)")
     df = df.Define(f"{prefix}lep_all", f"FCCAnalyses::MCParticle::sel_pdgID({pdgid}, true)({prefix}stable)")
 
-    df = df.Define(f"{prefix}lep_pcut", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
+    if sample_type == "local":
+        df = df.Define(f"{prefix}lep_pcut_presort", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
+        df = df.Define(f"{prefix}lep_pcut",  f"fcc_pipeline::DYfunction::sort_pt({prefix}lep_pcut_presort)")
+    elif sample_type == "central":
+        df = df.Define(f"{prefix}lep_pcut", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
+    else:
+        raise ValueError(f"Unknown sample type: {sample_type}, indexing step")
+
+
     df = df.Define(f"{prefix}n_lep", f"{prefix}lep_pcut.size()")
     df = df.Filter(f"{prefix}n_lep >= {n_lep_cut}", f"require at least {n_lep_cut} {lep}s")
 
