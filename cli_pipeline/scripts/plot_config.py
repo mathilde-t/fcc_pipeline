@@ -312,7 +312,31 @@ hists = {
         "ytitle": "Events",
     },
 
+    "lep0_theta": {
+        "output": "lep0_theta",
+        "logy": False,
+        "stack": True,
+        "rebin": 5,
+        "xmin": 0,
+        "xmax": 3.2,
+        "ymin": 0,
+        "ymax": 60,
+        "xtitle": "#theta (leading lepton) (rad)",
+        "ytitle": "Events",
+    },
 
+    "lep1_theta": {
+        "output": "lep1_theta",
+        "logy": False,
+        "stack": True,
+        "rebin": 5,
+        "xmin": 0,
+        "xmax": 3.2,
+        "ymin": 0,
+        "ymax": 60,
+        "xtitle": "#theta (subleading lepton) (rad)",
+        "ytitle": "Events",
+    },
 
     "lep0_costheta": {
         "output": "lep0_costheta",

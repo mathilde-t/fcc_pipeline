@@ -96,6 +96,8 @@ class RDFanalysis:
             "lep1_pz",
             "lep0_charge",
             "lep1_charge",
+            "lep0_theta",
+            "lep1_theta",
 
             "pass_selection",
 

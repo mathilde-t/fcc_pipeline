@@ -42,29 +42,30 @@ def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, prefix=N
 def define_lepton_observables(df_lep, lep, particle_collection, GENORRECO, prefix=None):
     prefix = f"{lep}_" if prefix is None else prefix
 
-    if GENORRECO == "gen":
-        df_lep = df_lep.Define(f"{prefix}lep0_pdgs", f"FCCAnalyses::{particle_collection}::get_pdg({prefix}lep_pcut)[0]")
-        df_lep = df_lep.Define(f"{prefix}lep1_pdgs", f"FCCAnalyses::{particle_collection}::get_pdg({prefix}lep_pcut)[1]")
-    else:
-        df_lep = df_lep.Define(f"{prefix}lep0_pdgs", "-1")
-        df_lep = df_lep.Define(f"{prefix}lep1_pdgs", "-1")
-    
-    df_lep = df_lep.Define(f"{prefix}lep0_eta", f"FCCAnalyses::{particle_collection}::get_eta({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_eta", f"FCCAnalyses::{particle_collection}::get_eta({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_phi", f"FCCAnalyses::{particle_collection}::get_phi({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_phi", f"FCCAnalyses::{particle_collection}::get_phi({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_p", f"FCCAnalyses::{particle_collection}::get_p({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_p", f"FCCAnalyses::{particle_collection}::get_p({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_pt", f"FCCAnalyses::{particle_collection}::get_pt({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_pt", f"FCCAnalyses::{particle_collection}::get_pt({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_px", f"FCCAnalyses::{particle_collection}::get_px({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_px", f"FCCAnalyses::{particle_collection}::get_px({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_py", f"FCCAnalyses::{particle_collection}::get_py({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_py", f"FCCAnalyses::{particle_collection}::get_py({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_pz", f"FCCAnalyses::{particle_collection}::get_pz({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_pz", f"FCCAnalyses::{particle_collection}::get_pz({prefix}lep_pcut)[1]")
-    df_lep = df_lep.Define(f"{prefix}lep0_charge", f"FCCAnalyses::{particle_collection}::get_charge({prefix}lep_pcut)[0]")
-    df_lep = df_lep.Define(f"{prefix}lep1_charge", f"FCCAnalyses::{particle_collection}::get_charge({prefix}lep_pcut)[1]")
+    observables = {
+        "pdgs": "get_pdg",
+        "eta": "get_eta",
+        "phi": "get_phi",
+        "p": "get_p",
+        "pt": "get_pt",
+        "px": "get_px",
+        "py": "get_py",
+        "pz": "get_pz",
+        "charge": "get_charge",
+        "theta": "get_theta",
+    }
+
+    for obs, getter in observables.items():
+        for i in range(2):
+            name = f"{prefix}lep{i}_{obs}"
+
+            if obs == "pdgs" and GENORRECO != "gen":
+                expression = "-1"
+            else:
+                expression = f"FCCAnalyses::{particle_collection}::{getter}({prefix}lep_pcut)[{i}]"
+
+            df_lep = df_lep.Define(name, expression)
+
     return df_lep
 
 
