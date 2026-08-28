@@ -297,6 +297,8 @@ def run_ak_plots(cfg, cfg_name):
             # )
 
             fig.subplots_adjust(top=0.84)
+            
+            ax_comp.set_ylim(0.5, 1.5)
 
             ax_main.text(
                 0.0, 1.05,
@@ -315,16 +317,37 @@ def run_ak_plots(cfg, cfg_name):
                 style="italic",
                 clip_on=False,
             )
+            
+            normtag = cfg.lumi_scaling["normalisation"]
+            lumi = cfg.lumi_scaling["intLumi"]
 
-            ax_main.text(
-                1.0, 1.05,
-                r"$\sqrt{s}=91.2\,\mathrm{GeV}$",
-                transform=ax_main.transAxes,
-                ha="right",
-                fontsize=28,
-                clip_on=False,
-            )
-
+            if normtag:
+                ax_main.text(
+                    1.0, 1.062,
+                    rf"$\mathcal{{L}}={lumi / 1000.0:.1f}\,\mathrm{{ab}}^{{-1}}$",
+                    transform=ax_main.transAxes,
+                    ha="right",
+                    fontsize=22,
+                    clip_on=False,
+                )
+                
+                ax_main.text(
+                    1.0, 1.01,
+                    r"$\sqrt{s}=91.2\,\mathrm{GeV}$",
+                    transform=ax_main.transAxes,
+                    ha="right",
+                    fontsize=22,
+                    clip_on=False,
+                )
+            else:
+                ax_main.text(
+                    1.0, 1.05,
+                    r"$\sqrt{s}=91.2\,\mathrm{GeV}$",
+                    transform=ax_main.transAxes,
+                    ha="right",
+                    fontsize=28,
+                    clip_on=False,
+                )
             ax_main.text(
                 0.5, 0.924,
                 f"level: {level}",
