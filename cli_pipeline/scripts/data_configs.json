@@ -1,6 +1,6 @@
 {
     "local_prod_ee_z_mumu_reco": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_reco_delphes",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
@@ -51,14 +51,14 @@
     },
 
     "local_prod_ee_z_mumu_gen": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_gen",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
         
         "processList": {
-            "ee_z_ee_ecm91": {
+            "ee_z_ee_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Electron",
@@ -71,7 +71,7 @@
                 }
             },
 
-            "ee_z_mumu_ecm91": {
+            "ee_z_mumu_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 2012600,
                 "lep": "Muon",
@@ -101,7 +101,7 @@
     },
 
     "local_prod_ee_z_mumu_minus_z_res_reco": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_reco_delphes",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
@@ -152,14 +152,14 @@
     },
 
     "local_prod_ee_z_mumu_minus_z_res_gen": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_gen",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
         
         "processList": {
-            "ee_ee_minus_z_res_ecm91": {
+            "ee_ee_minus_z_res_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 2516100,
                 "lep": "Electron",
@@ -172,7 +172,7 @@
                 }
             },
 
-            "ee_mumu_minus_z_res_ecm91": {
+            "ee_mumu_minus_z_res_ecm91_delphes": {
                 "fraction": 1.0,
                 "crossSection": 10764,
                 "lep": "Muon",
@@ -203,14 +203,14 @@
     },
 
     "local_prod_ee_mumu_reco": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_reco_delphes",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
         
         "processList": {
-            "ee_ee_ecm91_delphes": {
+            "ee_ee_ecm91_delphes" : {
                 "fraction": 1.0,
                 "crossSection": 4487600,
                 "lep": "Electron",
@@ -223,7 +223,7 @@
                 }
             },
 
-            "ee_mumu_ecm91_delphes": {
+            "ee_mumu_ecm91_delphes" : {
                 "fraction": 1.0,
                 "crossSection": 2024700,
                 "lep": "Muon",
@@ -254,14 +254,14 @@
     },
 
     "local_prod_ee_mumu_gen": {
-        "inputDir": "diy",
+        "inputDir": "/eos/user/m/mwitt/fcc_generation/output",
         "outputDir": "diy_samples_gen",
         "procDict": "./jsons/dummy.json",
         "prodTag": null,
         "sample_type": "local",
         
         "processList": {
-            "ee_ee_ecm91": {
+            "ee_ee_ecm91_delphes" : {
                 "fraction": 1.0,
                 "crossSection": 4487600,
                 "lep": "Electron",
@@ -274,9 +274,9 @@
                 }
             },
 
-            "ee_mumu_ecm91": {
+            "ee_mumu_ecm91_delphes" : {
                 "fraction": 1.0,
-                "crossSection": 2024700,
+                "crossSection": 2084300,
                 "lep": "Muon",
                 "fs": "mu",
 
@@ -303,6 +303,7 @@
         }
         
     },
+
 
     "central_prod_ee_mumu_reco": {
         "inputDir": "wi23_idea_wzp6",

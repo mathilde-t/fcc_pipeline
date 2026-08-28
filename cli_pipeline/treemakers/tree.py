@@ -22,25 +22,13 @@ template = "treemakers/convertEDMtoNanoAODlike.py"
 #print("globals:", list(globals().keys()))
 
 
-def count_n_generated(cfg, input_dir, dataset, genorreco):
-    # per file
-    if cfg.sample_type == "local":
-        if genorreco == "reco":
-            filename = os.path.join(input_dir, dataset, f"{dataset}.root")
-        elif genorreco == "gen":
-            filename = os.path.join(input_dir, dataset, f"{dataset}.e4h.root")
-        else:
-            RuntimeError(f"Generation type not found: {genorreco}")
-
-    elif cfg.sample_type == "central":
-        filename = os.path.join(input_dir, f"{dataset}.root")
-
-    else:
-        raise RuntimeError(f"Unknown sample type: {cfg.sample_type}")
+def count_n_generated(cfg, inputDir, dataset, genorreco):
+    filename = os.path.join(inputDir, f"{dataset}.root")
 
     if not os.path.exists(filename):
         raise RuntimeError(f"File not found: {filename}")
 
+    print(f"[INFO] Counting events in: {filename}")
     df = ROOT.RDataFrame("events", filename)
 
     return df.Count().GetValue()
@@ -64,10 +52,15 @@ for dataset, info in cfg.processList.items():
 
     content = content.replace("__DATASET__", dataset)
     content = content.replace("__XSEC__", str(xsec))
-    inputDir = os.path.join(
-        "./localSamples/",
-        cfg.inputDir
-    )
+    if cfg.sample_type == "local":
+        inputDir = cfg.inputDir
+    elif cfg.sample_type == "central":
+        inputDir = os.path.join(
+            "./localSamples/",
+            cfg.inputDir
+            )
+    else:
+        raise RuntimeError(f"Unknown sample type: {cfg.sample_type}")
     print(f"[INFO] tree inputDir: {inputDir}")
     content = content.replace("__INPUTDIR__", inputDir)
 
