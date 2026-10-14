@@ -25,7 +25,7 @@ PDG_IDS = {
     "Tau": 15,
 }
 
-def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, prefix=None):
+def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, theta_min=15, theta_max=165, prefix=None):
     prefix = f"{lep}_" if prefix is None else prefix
     pdgid = PDG_IDS[lep]
 
@@ -34,7 +34,8 @@ def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, prefix=N
     df = df.Define(f"{prefix}lep_all", f"FCCAnalyses::MCParticle::sel_pdgID({pdgid}, true)({prefix}stable)")
 
     df = df.Define(f"{prefix}lep_pcut_presort", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
-    df = df.Define(f"{prefix}lep_pcut",  f"fcc_pipeline::DYfunction::sort_by_charge({prefix}lep_pcut_presort)")
+    df = df.Define(f"{prefix}lep_thetacut", f"fcc_pipeline::DYfunction::sel_theta({prefix}lep_pcut_presort, {theta_min}, {theta_max})")
+    df = df.Define(f"{prefix}lep_pcut",  f"fcc_pipeline::DYfunction::sort_by_charge({prefix}lep_thetacut)")
 
     df = df.Define(f"{prefix}n_lep", f"{prefix}lep_pcut.size()")
     df = df.Filter(f"{prefix}n_lep >= {n_lep_cut}", f"require at least {n_lep_cut} {lep}s")

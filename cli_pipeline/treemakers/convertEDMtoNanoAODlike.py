@@ -45,7 +45,7 @@ class RDFanalysis:
             if GENORRECO == "reco":
                 df = prepare_reco_collection(df, lep, SAMPLETYPE, pt_cut=0, n_lep_cut=0)
             elif GENORRECO == "gen":
-                df = prepare_gen_collection(df, lep, SAMPLETYPE, pt_cut=0, n_lep_cut=0)
+                df = prepare_gen_collection(df, lep, SAMPLETYPE, pt_cut=0, n_lep_cut=0, theta_min=15, theta_max=165)
             else:
                 raise ValueError(f"Unknown GENORRECO value: {GENORRECO}")
             

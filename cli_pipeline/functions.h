@@ -143,6 +143,18 @@ sort_by_charge(ROOT::VecOps::RVec<Particle> particles) {
     return particles;
 }
 
+template <typename Particle>
+ROOT::VecOps::RVec<Particle>
+sel_theta(ROOT::VecOps::RVec<Particle> particles, float theta_min_deg, float theta_max_deg) {
+    ROOT::VecOps::RVec<Particle> out;
+    for (const auto& p : particles) {
+        const float pt = std::sqrt(p.momentum.x * p.momentum.x + p.momentum.y * p.momentum.y);
+        const float theta = std::atan2(pt, p.momentum.z) * 180. / M_PI;
+        if (theta > theta_min_deg && theta < theta_max_deg) out.push_back(p);
+    }
+    return out;
+}
+
 } // namespace DYfunction
 } // namespace fcc_pipeline
 
