@@ -10,7 +10,7 @@ python plotmakers/plots_categorisation.py
 import ROOT
 import os
 from utils_cli.path_utils import make_norm_dir_name, print_out_doubleline, print_out_line
-from scripts.lep_list import LEP_LIST
+from scripts.lep_list import LEP_LIST, branch_name, fill_weight
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
@@ -160,7 +160,7 @@ def run_category_plots(cfg, cfg_name):
             else:
                 raise ValueError(f"Cannot determine lepton type from process '{proc}'")
 
-            branch = f"{lep}_{var}"
+            branch = branch_name(lep, var)
 
             for category, selection in categories.items():
 
@@ -168,6 +168,8 @@ def run_category_plots(cfg, cfg_name):
                     cut = selection
                 else:
                     cut = selection % lep
+
+                cut = fill_weight(var, cut)
 
                 h = make_hist(
                     tree,

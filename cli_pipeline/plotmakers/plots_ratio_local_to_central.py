@@ -9,7 +9,7 @@ import os
 import ROOT
 
 from utils_cli.path_utils import make_norm_dir_name
-from scripts.lep_list import LEP_LIST
+from scripts.lep_list import LEP_LIST, branch_name, fill_weight
 from scripts.config import DATACONFS, get_config
 
 from pprint import pprint
@@ -260,9 +260,9 @@ for sample, levels in ratio_configs.items():
                 else:
                     lep = "Electron"
 
-                branch = f"{lep}_{var}"
+                branch = branch_name(lep, var)
 
-                cut = "weight"
+                cut = fill_weight(var)
 
                 h = make_hist(
                     tree,
@@ -288,12 +288,14 @@ for sample, levels in ratio_configs.items():
                 else:
                     continue
 
-                branch = f"{lep}_{var}"
+                branch = branch_name(lep, var)
 
                 if central_category == "inclusive":
                     cut = "weight"
                 else:
                     cut = selection % lep
+
+                cut = fill_weight(var, cut)
 
                 h = make_hist(
                     tree,

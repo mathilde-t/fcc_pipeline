@@ -15,7 +15,7 @@ mh.style.use('CMS')
 import matplotlib.patches as patches
 
 from utils_cli.path_utils import make_norm_dir_name, print_out_doubleline, print_out_line
-from scripts.lep_list import LEP_LIST,OBJECT_LEVEL_HISTS 
+from scripts.lep_list import LEP_LIST, OBJECT_LEVEL_HISTS, branch_name
 from scripts.plot_config import hists
 from scripts.config import get_config
 print("Available hists:", list(hists.keys()))
@@ -159,7 +159,7 @@ def run_ak_plots(cfg, cfg_name):
     arrays_local = {}
     arrays_central = {}
 
-    cols = [f"{lep}_{hist}" for lep in LEP_LIST for hist in hists.keys() ] + ["weight"]
+    cols = sorted({branch_name(lep, hist) for lep in LEP_LIST for hist in hists.keys()} | {"weight"})
 
     for proc in cfg.processList.keys():
         path = os.path.join(inputDir_local, f"{proc}.root")
@@ -217,7 +217,7 @@ def run_ak_plots(cfg, cfg_name):
             ).Weight()
 
             for local_procs, central_procs in comparisons:
-                branch = f"{lep}_{name_hist}"
+                branch = branch_name(lep, name_hist)
 
                 for local_proc in local_procs:
 
@@ -230,6 +230,10 @@ def run_ak_plots(cfg, cfg_name):
                     local_values = getattr(arrays_local[local_proc], branch)
 
                     weights = getattr(arrays_local[local_proc], "weight")
+
+                    # the weight distribution itself is filled unweighted
+                    if name_hist == "weight":
+                        weights = ak.ones_like(weights)
                     
                     if name_hist in OBJECT_LEVEL_HISTS:
                         weights = ak.flatten(ak.broadcast_arrays(local_values, weights)[1])
@@ -250,7 +254,7 @@ def run_ak_plots(cfg, cfg_name):
                     # )
                     # print("")
 
-                    h1.fill(**{name_hist: local_values}, weight=weights)
+                    h1.fill(local_values, weight=weights)
 
                 for central_proc in central_procs:
 
@@ -264,11 +268,15 @@ def run_ak_plots(cfg, cfg_name):
 
                     weights = getattr(arrays_central[central_proc], "weight")
 
+                    # the weight distribution itself is filled unweighted
+                    if name_hist == "weight":
+                        weights = ak.ones_like(weights)
+
                     if name_hist in OBJECT_LEVEL_HISTS:
                         weights = ak.flatten(ak.broadcast_arrays(central_values, weights)[1])
                         central_values = ak.flatten(central_values)
 
-                    h2.fill(**{name_hist: central_values}, weight=weights)
+                    h2.fill(central_values, weight=weights)
 
 
             fig, ax_main, ax_comp = mh.comp.hists(

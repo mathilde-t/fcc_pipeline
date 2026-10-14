@@ -11,7 +11,7 @@ import ROOT
 
 from utils_cli.path_utils import make_norm_dir_name
 from scripts.config import DATACONFS, get_config
-from scripts.lep_list import LEP_LIST
+from scripts.lep_list import LEP_LIST, branch_name, fill_weight
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
@@ -155,7 +155,7 @@ for level in ("gen", "reco"):
                 else:
                     continue
 
-                branch = f"{lep}_{var}"
+                branch = branch_name(lep, var)
 
                 h = make_hist(
                     tree,
@@ -164,7 +164,7 @@ for level in ("gen", "reco"):
                     hist_cfg["xmin"],
                     hist_cfg["xmax"],
                     f"h_{hist_name}_{category}_{lep}_{proc}",
-                    "weight",
+                    fill_weight(var),
                 )
 
                 if hists_local[category][lep] is None:

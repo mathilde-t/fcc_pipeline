@@ -9,7 +9,7 @@ python plotmakers/plots_pyroot.py
 import ROOT
 import os
 from utils_cli.path_utils import make_norm_dir_name, print_out_doubleline, print_out_line
-from scripts.lep_list import LEP_LIST
+from scripts.lep_list import LEP_LIST, branch_name, fill_weight
 
 ROOT.gROOT.SetBatch(True)
 ROOT.gStyle.SetOptStat(0)
@@ -92,7 +92,7 @@ def run_allpr_plots(cfg, cfg_name):
         h = ROOT.TH1F(hname, "", nbins, xmin, xmax)
         h.Sumw2()
 
-        tree.Draw(f"{var}>>{hname}", "weight", "goff")
+        tree.Draw(f"{var}>>{hname}", fill_weight(var), "goff")
 
         if xtitle is not None:
             h.GetXaxis().SetTitle(xtitle)
@@ -136,7 +136,7 @@ def run_allpr_plots(cfg, cfg_name):
             else:
                 raise ValueError(f"Cannot determine lepton type from process '{proc}'")
 
-            branch = f"{lep}_{var}"
+            branch = branch_name(lep, var)
 
 
             h = make_hist(

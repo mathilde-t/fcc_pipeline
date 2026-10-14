@@ -390,4 +390,18 @@ hists = {
         "ytitle": "Events",
     },
 
+    "weight": {
+        "output": "weight",
+        "logy": False,
+        "stack": True,
+        "rebin": 5,
+        "bins": 100,
+        "xmin": -1,
+        "xmax": 1000000,
+        "ymin": 0,
+        "ymax": 60,
+        "xtitle": "weight value",
+        "ytitle": "Events",
+    },
+
 }
