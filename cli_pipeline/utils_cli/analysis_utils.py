@@ -12,7 +12,8 @@ def prepare_reco_collection(df_lep, lep, sample_type, pt_cut=0, n_lep_cut=0, pre
         raise ValueError(f"Unknown sample type: {sample_type}, indexing step")
 
     df_lep = df_lep.Define(f"{prefix}lep_all", f"FCCAnalyses::ReconstructedParticle::get({lep}_Idx, ReconstructedParticles)")
-    df_lep = df_lep.Define(f"{prefix}lep_pcut", f"FCCAnalyses::ReconstructedParticle::sel_pt({pt_cut})({prefix}lep_all)")
+    df_lep = df_lep.Define(f"{prefix}lep_pcut_presort", f"FCCAnalyses::ReconstructedParticle::sel_pt({pt_cut})({prefix}lep_all)")
+    df_lep = df_lep.Define(f"{prefix}lep_pcut", f"fcc_pipeline::DYfunction::sort_by_charge({prefix}lep_pcut_presort)")
     df_lep = df_lep.Filter(f"{prefix}lep_pcut.size() >= {n_lep_cut}")
     df_lep = df_lep.Define(f"{prefix}n_lep", f"{prefix}lep_pcut.size()")
 
@@ -32,14 +33,8 @@ def prepare_gen_collection(df, lep, sample_type, pt_cut=0, n_lep_cut=0, prefix=N
     df = df.Define(f"{prefix}stable", "FCCAnalyses::MCParticle::sel_genStatus(1)(Particle)")
     df = df.Define(f"{prefix}lep_all", f"FCCAnalyses::MCParticle::sel_pdgID({pdgid}, true)({prefix}stable)")
 
-    if sample_type == "local":
-        df = df.Define(f"{prefix}lep_pcut_presort", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
-        df = df.Define(f"{prefix}lep_pcut",  f"fcc_pipeline::DYfunction::sort_pt({prefix}lep_pcut_presort)")
-    elif sample_type == "central":
-        df = df.Define(f"{prefix}lep_pcut", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
-    else:
-        raise ValueError(f"Unknown sample type: {sample_type}, indexing step")
-
+    df = df.Define(f"{prefix}lep_pcut_presort", f"FCCAnalyses::MCParticle::sel_pt({pt_cut})({prefix}lep_all)")
+    df = df.Define(f"{prefix}lep_pcut",  f"fcc_pipeline::DYfunction::sort_by_charge({prefix}lep_pcut_presort)")
 
     df = df.Define(f"{prefix}n_lep", f"{prefix}lep_pcut.size()")
     df = df.Filter(f"{prefix}n_lep >= {n_lep_cut}", f"require at least {n_lep_cut} {lep}s")

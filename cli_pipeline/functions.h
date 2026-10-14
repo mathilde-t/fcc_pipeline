@@ -6,7 +6,6 @@
 #include <math.h>
 #include <vector>
 #include <type_traits>
-#include <random>
 
 #include "TLorentzVector.h"
 #include "ROOT/RVec.hxx"
@@ -28,10 +27,11 @@ struct build_dilepton {
     // Output convention:
     //
     // out[0] : dilepton system
-    // out[1] : leading lepton
-    // out[2] : subleading lepton
+    // out[1] : positive lepton
+    // out[2] : negative lepton
     //
-    // If fewer than two leptons exist:
+    // If fewer than two leptons exist, or the two highest momentum
+    // leptons have the same charge:
     // return empty vector
     //
     // Validity can later be checked with:
@@ -109,12 +109,14 @@ struct build_dilepton {
 
         // store:
         // [0] dilepton
-        // [1] leading lepton
-        // [2] subleading lepton
+        // [1] positive lepton
+        // [2] negative lepton
+
+        const int i_plus = leptons[0].charge > 0 ? 0 : 1;
 
         out.push_back(dilep);
-        out.push_back(leptons[0]);
-        out.push_back(leptons[1]);
+        out.push_back(leptons[i_plus]);
+        out.push_back(leptons[1 - i_plus]);
 
         return out;
     }
@@ -122,35 +124,19 @@ struct build_dilepton {
 
 template <typename Particle>
 ROOT::VecOps::RVec<Particle>
-sort_pt(ROOT::VecOps::RVec<Particle> particles) {
+sort_by_charge(ROOT::VecOps::RVec<Particle> particles) {
 
-    // Randomise the initial ordering
-    static thread_local std::mt19937 rng(std::random_device{}());
+    // Sort lep0 positive leptons first, then lep1 negative ones:
+    // for an opposite-sign pair, lep0 = l+ and lep1 = l-.
+    // Note: for same-sign events, lep0 and lep1 carry the same charge.
 
-    std::shuffle(
-        particles.begin(),
-        particles.end(),
-        rng
-    );
-
-    // Sort by descending pT.
-    // For equal pT, stable_sort keeps the random order.
     std::stable_sort(
         particles.begin(),
         particles.end(),
         [](const auto& a, const auto& b) {
 
-            const float pt_a = std::sqrt(
-                a.momentum.x * a.momentum.x +
-                a.momentum.y * a.momentum.y
-            );
-
-            const float pt_b = std::sqrt(
-                b.momentum.x * b.momentum.x +
-                b.momentum.y * b.momentum.y
-            );
-
-            return pt_a > pt_b;
+            // charge is a float in edm4hep, compare it directly
+            return a.charge > b.charge;
         }
     );
 

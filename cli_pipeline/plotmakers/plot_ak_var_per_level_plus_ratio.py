@@ -91,6 +91,7 @@ def root_to_mpl_label(label):
         "#pi": r"\pi",
         "#sqrt": r"\sqrt",
         "n_lep": r"n_{lep}",
+        "#ell": r"\ell",
     })
 
     for root, mpl in replacements.items():

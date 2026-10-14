@@ -35,7 +35,7 @@ hists = {
         "xmax": 100,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "p (leading lepton) (GeV)",
+        "xtitle": "p (#ell^{+}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -48,7 +48,7 @@ hists = {
         "xmax": 100,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "p (subleading lepton) (GeV)",
+        "xtitle": "p (#ell^{-}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -61,7 +61,7 @@ hists = {
         "xmax": 100,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "p (leading lepton) (GeV) after dilepton selection",
+        "xtitle": "p (#ell^{+}) (GeV) after dilepton selection",
         "ytitle": "Events",
     },
 
@@ -74,7 +74,7 @@ hists = {
         "xmax": 100,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "p (subleading lepton) (GeV) after dilepton selection",
+        "xtitle": "p (#ell^{-}) (GeV) after dilepton selection",
         "ytitle": "Events",
     },
 
@@ -87,7 +87,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{x} (leading lepton) (GeV)",
+        "xtitle": "p_{x} (#ell^{+}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -100,7 +100,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{x} (subleading lepton) (GeV)",
+        "xtitle": "p_{x} (#ell^{-}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -113,7 +113,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{y} (leading lepton) (GeV)",
+        "xtitle": "p_{y} (#ell^{+}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -126,7 +126,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{y} (subleading lepton) (GeV)",
+        "xtitle": "p_{y} (#ell^{-}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -139,7 +139,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{z} (leading lepton) (GeV)",
+        "xtitle": "p_{z} (#ell^{+}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -152,7 +152,7 @@ hists = {
         "xmax": 50,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{z} (subleading lepton) (GeV)",
+        "xtitle": "p_{z} (#ell^{-}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -165,7 +165,7 @@ hists = {
         "xmax": 70,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{T} (leading lepton) (GeV)",
+        "xtitle": "p_{T} (#ell^{+}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -178,7 +178,7 @@ hists = {
         "xmax": 70,
         "ymin": 0,
         "ymax": 300,
-        "xtitle": "p_{T} (subleading lepton) (GeV)",
+        "xtitle": "p_{T} (#ell^{-}) (GeV)",
         "ytitle": "Events",
     },
 
@@ -191,7 +191,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#eta (leading lepton)",
+        "xtitle": "#eta (#ell^{+})",
         "ytitle": "Events",
     },
 
@@ -204,7 +204,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#eta (subleading lepton)",
+        "xtitle": "#eta (#ell^{-})",
         "ytitle": "Events",
     },
 
@@ -217,7 +217,7 @@ hists = {
         "xmax": 5,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#phi (leading lepton) (rad)",
+        "xtitle": "#phi (#ell^{+}) (rad)",
         "ytitle": "Events",
     },
 
@@ -230,7 +230,7 @@ hists = {
         "xmax": 5,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#phi (subleading lepton) (rad)",
+        "xtitle": "#phi (#ell^{-}) (rad)",
         "ytitle": "Events",
     },
 
@@ -243,7 +243,7 @@ hists = {
         "xmax": 30,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "PDG ID (leading lepton)",
+        "xtitle": "PDG ID (#ell^{+})",
         "ytitle": "Events",
     },
 
@@ -256,7 +256,7 @@ hists = {
         "xmax": 30,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "PDG ID (subleading lepton)",
+        "xtitle": "PDG ID (#ell^{-})",
         "ytitle": "Events",
     },
 
@@ -269,7 +269,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "charge (leading lepton) (e)",
+        "xtitle": "charge (#ell^{+}) (e)",
         "ytitle": "Events",
     },
 
@@ -282,7 +282,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "charge (subleading lepton) (e)",
+        "xtitle": "charge (#ell^{-}) (e)",
         "ytitle": "Events",
     },
 
@@ -295,7 +295,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "charge (leading lepton) (e) after dilepton selection",
+        "xtitle": "charge (#ell^{+}) (e) after dilepton selection",
         "ytitle": "Events",
     },
 
@@ -308,7 +308,7 @@ hists = {
         "xmax": 3,
         "ymin": 0,
         "ymax": 2000,
-        "xtitle": "charge (subleading lepton) (e) after dilepton selection",
+        "xtitle": "charge (#ell^{-}) (e) after dilepton selection",
         "ytitle": "Events",
     },
 
@@ -321,7 +321,7 @@ hists = {
         "xmax": 3.2,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#theta (leading lepton) (rad)",
+        "xtitle": "#theta (#ell^{+}) (rad)",
         "ytitle": "Events",
     },
 
@@ -334,7 +334,7 @@ hists = {
         "xmax": 3.2,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "#theta (subleading lepton) (rad)",
+        "xtitle": "#theta (#ell^{-}) (rad)",
         "ytitle": "Events",
     },
 
@@ -347,7 +347,7 @@ hists = {
         "xmax": 1,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "cos#theta (leading lepton) (rad)",
+        "xtitle": "cos#theta (#ell^{+}) (rad)",
         "ytitle": "Events",
     },
 
@@ -360,7 +360,7 @@ hists = {
         "xmax": 1,
         "ymin": 0,
         "ymax": 60,
-        "xtitle": "cos#theta (subleading lepton) (rad)",
+        "xtitle": "cos#theta (#ell^{-}) (rad)",
         "ytitle": "Events",
     },
 
