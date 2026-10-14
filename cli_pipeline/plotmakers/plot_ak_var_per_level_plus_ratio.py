@@ -307,7 +307,8 @@ def run_ak_plots(cfg, cfg_name):
 
             fig.subplots_adjust(top=0.84)
             
-            ax_comp.set_ylim(0.5, 1.5)
+            # ax_comp.set_ylim(0.5, 1.5)
+            ax_comp.set_ylim(0.8, 1.2)
 
             ax_main.text(
                 0.0, 1.05,
