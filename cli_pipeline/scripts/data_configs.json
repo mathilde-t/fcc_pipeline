@@ -212,7 +212,7 @@
         "processList": {
             "ee_ee_ecm91_delphes" : {
                 "fraction": 1.0,
-                "crossSection": 4487600,
+                "crossSection": 3273820,
                 "lep": "Electron",
                 "fs": "e",
 
@@ -225,7 +225,7 @@
 
             "ee_mumu_ecm91_delphes" : {
                 "fraction": 1.0,
-                "crossSection": 2024700,
+                "crossSection": 1462080,
                 "lep": "Muon",
                 "fs": "mu",
 
@@ -263,7 +263,7 @@
         "processList": {
             "ee_ee_ecm91_delphes" : {
                 "fraction": 1.0,
-                "crossSection": 4487600,
+                "crossSection": 3273820,
                 "lep": "Electron",
                 "fs": "e",
 
@@ -276,7 +276,7 @@
 
             "ee_mumu_ecm91_delphes" : {
                 "fraction": 1.0,
-                "crossSection": 2084300,
+                "crossSection": 1462080,
                 "lep": "Muon",
                 "fs": "mu",
 
@@ -303,7 +303,6 @@
         }
         
     },
-
 
     "central_prod_ee_mumu_reco": {
         "inputDir": "wi23_idea_wzp6",
