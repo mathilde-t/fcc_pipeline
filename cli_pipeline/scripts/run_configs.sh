@@ -23,11 +23,11 @@ central_configs=(
 
 # Select which set of configs to run
 # for full pipeline, run on central cfg fist, then on local cfgs to make the ak plot possible
-configs=("${central_configs[@]}")
-# configs=("${local_configs[@]}")
+# configs=("${central_configs[@]}")
+configs=("${local_configs[@]}")
 
 
-### Tree step
+## Tree step
 for config in "${configs[@]}"; do
 
     echo "========================================"
@@ -43,7 +43,7 @@ for config in "${configs[@]}"; do
 done
 
 
-### Plot step
+## Plot step
 for config in "${configs[@]}"; do
 
     echo "========================================"
